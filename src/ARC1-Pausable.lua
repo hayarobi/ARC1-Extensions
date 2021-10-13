@@ -12,7 +12,7 @@ state.var {
 
 -- Indicate an account has the Pauser Role
 -- @type    query
--- @param   account  (address) 
+-- @param   account  (address)
 -- @return  (bool) true/false
 
 function isPauser(account)
@@ -24,7 +24,7 @@ end
 
 -- Grant the Pauser Role to an account
 -- @type    call
--- @param   account  (address) 
+-- @param   account  (address)
 -- @event   addPauser(account)
 
 function addPauser(account)
@@ -88,7 +88,6 @@ function pause()
   assert(isPauser(system.getSender()), "only pauser can pause")
 
   _paused:set(true)
-  whenPaused()
 
   contract.event("pause", system.getSender())
 end
