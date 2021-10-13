@@ -158,7 +158,6 @@ local function _transfer(from, to, amount, ...)
   _callTokensReceived(from, to, amount, ...)
 end
 
-
 -- Mint new tokens to an account
 -- @type    internal
 -- @param   to      (address) recipient's address
