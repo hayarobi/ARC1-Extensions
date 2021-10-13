@@ -126,6 +126,21 @@ end
 abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 
 
+-- Hook "tokensReceived" function on the recipient after a 'transfer'
+-- @type internal
+-- @param   from   (address) sender's address
+-- @param   to     (address) recipient's address
+-- @param   amount (ubig) amount of token to send
+-- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+
+local function _callTokensReceived(from, to, amount, ...)
+
+  -- if to ~= system.getContractID() and system.isContract(to) then
+  if to ~= address0 and system.isContract(to) then
+    contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
+  end
+end
+
 -- Transfer tokens from an account to another
 -- @type    internal
 -- @param   from    (address) sender's address
@@ -173,19 +188,6 @@ local function _burn(from, amount)
 end
 
 
--- Hook "tokensReceived" function on the recipient after a 'transfer'
--- @type internal
--- @param   from   (address) sender's address
--- @param   to     (address) recipient's address
--- @param   amount (ubig) amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
-
-local function _callTokensReceived(from, to, amount, ...)
-
-  if to ~= system.getContractID() and system.isContract(to) then
-    contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
-  end
-end
 
 
 -- Transfer tokens to an account (from TX sender)
