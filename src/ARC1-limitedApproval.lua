@@ -28,7 +28,7 @@ function approve(spender, amount)
 end
 
 
--- Increase the amount of tokens that Tx sender allowed to an account 
+-- Increase the amount of tokens that Tx sender allowed to an account
 -- @type    call
 -- @param   spender (address) spender's address
 -- @param   amount  (ubig)    amount of increased tokens
@@ -101,7 +101,8 @@ function transferFromLtd(from, to, amount, ...)
   _transfer(from, to, amount, ...)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  contract.event("transferFrom", system.getSender(), from, to, amount)
+  -- contract.event("transferFrom", system.getSender(), from, to, amount)
+  contract.event("transfer", from, to, amount)
 end
 
 
@@ -121,7 +122,8 @@ function burnFromLtd(from, amount)
   _burn(from, amount)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  contract.event("burnFrom", system.getSender(), from, amount)
+  -- contract.event("burnFrom", system.getSender(), from, amount)
+  contract.event("transfer", from, address0, amount)
 end
 
 

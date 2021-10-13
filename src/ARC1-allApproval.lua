@@ -58,7 +58,8 @@ function transferFromAll(from, to, amount, ...)
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _transfer(from, to, amount, ...)
 
-  contract.event("transferFrom", system.getSender(), from, to, amount)
+  -- contract.event("transferFrom", system.getSender(), from, to, amount)
+  contract.event("transfer", from, to, amount)
 end
 
 
@@ -75,7 +76,8 @@ function burnFromAll(from, amount)
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _burn(from, amount)
 
-  contract.event("burnFrom", system.getSender(), from, amount)
+  -- contract.event("burnFrom", system.getSender(), from, amount)
+  contract.event("transfer", from, address0, amount)
 end
 
 

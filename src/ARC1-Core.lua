@@ -18,6 +18,8 @@ state.var {
 
 }
 
+address0 = '1111111111111111111111111111111111111111111111111111' -- null address
+
 -- Type check
 -- @type internal
 -- @param x variable to check
@@ -102,7 +104,7 @@ end
 
 -- Get a balance of an account
 -- @type    query
--- @param   owner  (address) 
+-- @param   owner  (address)
 -- @return  (ubig) balance of owner
 
 function balanceOf(owner)
@@ -159,7 +161,7 @@ end
 
 -- Burn tokens from an account
 -- @type    internal
--- @param   from   (address) 
+-- @param   from   (address)
 -- @param   amount  (ubig) amount of tokens to burn
 
 local function _burn(from, amount)
@@ -213,7 +215,8 @@ function burn(amount)
 
   _burn(system.getSender(), amount)
 
-  contract.event("burn", system.getSender(), amount)
+--  contract.event("burn", system.getSender(), amount)
+  contract.event("transfer", system.getSender(), address0, amount)
 end
 
 

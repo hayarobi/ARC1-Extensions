@@ -12,7 +12,7 @@ state.var {
 
 -- Indicate if an account is a minter
 -- @type    query
--- @param   account  (address) 
+-- @param   account  (address)
 -- @return  (bool) true/false
 
 function isMinter(account)
@@ -24,7 +24,7 @@ end
 
 -- Add an account to minters
 -- @type    call
--- @param   account  (address) 
+-- @param   account  (address)
 -- @event   addMinter(account)
 
 function addMinter(account)
@@ -40,7 +40,7 @@ end
 
 -- Remove an account from minters
 -- @type    call
--- @param   account  (address) 
+-- @param   account  (address)
 -- @event   removeMinter(account)
 
 function removeMinter(account)
@@ -84,7 +84,8 @@ function mint(account, amount)
 
   _mint(account, amount)
 
-  contract.event("mint", system.getSender(), account, amount)
+  -- contract.event("mint", system.getSender(), account, amount)
+  contract.event("transfer", address0, account, amount)
 end
 
 
