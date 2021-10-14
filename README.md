@@ -8,7 +8,7 @@ ARC1-Extensions is an extension of the ARC1Token (https://github.com/aergoio/ARC
 
 ARC1-Extensions adds the functions missing from ERC20 of the ARC1Token, such as stop transfer (`Pausable`), limited delegation (`Limited approval`), and minting tokens (`Mintable`).
 
-ARC1-Extensions additionally includes a function for managing bad users (`Blasklist`). Accounts that have been blacklisted can't transfer and burn tokens.
+ARC1-Extensions additionally includes functions for managing bad users (`Blasklist`). Accounts that have been blacklisted can't transfer and burn tokens.
 
 
 ## Specification
@@ -123,6 +123,11 @@ function removeMinter(account)
 -- @type    call
 -- @event   removeMinter(TX sender)
 function renounceMinter()
+
+-- set CAP
+-- @type    internal
+-- @param   amount   (ubig) amount of tokens to mint
+local function _setCAP(amount)
 
 -- Mint new tokens at an account
 -- @type    call

@@ -151,7 +151,7 @@ end
 local function _transfer(from, to, amount, ...)
   assert(not _paused:get(), "paused contract")
   assert(not _blacklist[from],'sender is on blacklist')
-  assert(not _blacklist[to],'receiver is on blacklist')
+  assert(not _blacklist[to],'recipient is on blacklist')
 
   assert(_balances[from] and _balances[from] >= amount, "not enough balance")
 
@@ -168,6 +168,7 @@ end
 
 local function _mint(to, amount, ...)
   assert(not _paused:get(), "paused contract")
+  assert(not _blacklist[to],'recipient is on blacklist')
 
   _totalSupply:set((_totalSupply:get() or bignum.number(0)) + amount)
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
@@ -184,7 +185,7 @@ end
 local function _burn(from, amount)
   assert(not _paused:get(), "paused contract")
   assert(not _blacklist[from],'sender is on blacklist')
-  
+
   assert(_balances[from] and _balances[from] >= amount, "not enough balance")
 
   _totalSupply:set(_totalSupply:get() - amount)

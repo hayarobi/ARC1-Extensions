@@ -55,20 +55,5 @@ function isOnBlacklist(account)
 end
 
 
--- Transfer tokens from an account to another by filtering with Blacklist
--- @type    call
--- @param   to     (address) recipient's address
--- @param   amount (ubig)    amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transfer(Tx sender, to, amount)
-
--- function transferByF(to, amount, ...)
---  assert(not isOnBlacklist(system.getSender()),'receiver account is on blacklist')
---  assert(not isOnBlacklist(to),'receiver account is on blacklist')
-
---  transfer(to, amount, ...)
--- end
-
-
-abi.register(addToBlacklist,removeFromBlacklist,transferByF)
+abi.register(addToBlacklist,removeFromBlacklist)
 abi.register_view(isOnBlacklist)

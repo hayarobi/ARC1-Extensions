@@ -69,11 +69,22 @@ function renounceMinter()
 end
 
 
+-- set CAP
+-- @type    internal
+-- @param   amount   (ubig) amount of tokens to mint
+
+local function _setCAP(amount)
+  _typecheck(amount, 'ubig')
+  _cap:set(amount)
+end
+
+
 -- Mint new tokens at an account
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @event   mint(TX sender, account, amount)
+-- @event   mint(TX sender, account, amount) -- tobe
+-- @event   transfer(address0, account, amount)
 
 function mint(account, amount)
   _typecheck(account, 'address')
