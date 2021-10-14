@@ -8,7 +8,8 @@ ARC1-Extensions is an extension of the ARC1Token (https://github.com/aergoio/ARC
 
 ARC1-Extensions adds the functions missing from ERC20 of the ARC1Token, such as stop transfer (`Pausable`), limited delegation (`Limited approval`), and minting tokens (`Mintable`).
 
-ARC1-Extensions additionally includes a function for managing bad users (`Blasklist`). Restrictions on accounts that have been blacklisted can arbitrarily defined, but the current implementation provides a  transmission function that prevents tokens from being received.
+ARC1-Extensions additionally includes a function for managing bad users (`Blasklist`). Accounts that have been blacklisted can't transfer and burn tokens.
+
 
 ## Specification
 
@@ -275,14 +276,6 @@ function removeFromBlacklist(account_list)
 -- @type    query
 -- @param   account   (address)
 function isOnBlacklist(account)
-
--- Transfer tokens from an account to another by filtering with Blacklist
--- @type    call
--- @param   to     (address) recipient's address
--- @param   amount (ubig)    amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transfer(Tx sender, to, amount)
-function transferByF(to, amount, ...)
 
 ```
 

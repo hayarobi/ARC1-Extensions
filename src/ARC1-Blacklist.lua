@@ -62,11 +62,12 @@ end
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
 -- @event   transfer(Tx sender, to, amount)
 
-function transferByF(to, amount, ...)
-  assert(not isOnBlacklist(to),'receiver account is on blacklist')
-  
-  transfer(to, amount, ...)
-end
+-- function transferByF(to, amount, ...)
+--  assert(not isOnBlacklist(system.getSender()),'receiver account is on blacklist')
+--  assert(not isOnBlacklist(to),'receiver account is on blacklist')
+
+--  transfer(to, amount, ...)
+-- end
 
 
 abi.register(addToBlacklist,removeFromBlacklist,transferByF)
