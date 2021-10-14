@@ -101,6 +101,12 @@ function burn(amount)
 
 ### + ARC1 : Mintable
 ``` lua
+
+-- set CAP
+-- @type    internal
+-- @param   amount   (ubig) amount of tokens to mint
+local function _setCAP(amount)
+
 -- Indicate if an account is a minter
 -- @type    query
 -- @param   account  (address) 
@@ -123,11 +129,6 @@ function removeMinter(account)
 -- @type    call
 -- @event   removeMinter(TX sender)
 function renounceMinter()
-
--- set CAP
--- @type    internal
--- @param   amount   (ubig) amount of tokens to mint
-local function _setCAP(amount)
 
 -- Mint new tokens at an account
 -- @type    call

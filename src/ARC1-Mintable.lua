@@ -10,6 +10,16 @@ state.var {
 }
 
 
+-- set CAP
+-- @type    internal
+-- @param   amount   (ubig) amount of mintable tokens
+
+local function _setCAP(amount)
+  _typecheck(amount, 'ubig')
+  _cap:set(amount)
+end
+
+
 -- Indicate if an account is a minter
 -- @type    query
 -- @param   account  (address)
@@ -68,15 +78,6 @@ function renounceMinter()
   contract.event("removeMinter", system.getSender())
 end
 
-
--- set CAP
--- @type    internal
--- @param   amount   (ubig) amount of tokens to mint
-
-local function _setCAP(amount)
-  _typecheck(amount, 'ubig')
-  _cap:set(amount)
-end
 
 
 -- Mint new tokens at an account
