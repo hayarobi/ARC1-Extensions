@@ -46,6 +46,14 @@ local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
 It can also be called from herajs, herapy, libaergo...
 
 
+## Token Factory Address
+
+<table>
+  <tr><td>testnet</td><td>Amg1tMCUzsRuGjUiWihbCwCmufdNGQAui6N6QMAPpz4wC4Y7eM1g</td></tr>
+  <tr><td>alphanet</td><td>Amgu52QrSVmLMJ8DMZnksNEgY164AaMKihCeowzVcmz6KQz5xXp2</td></tr>
+</table>
+
+
 ## Updating the Factory
 
 If some of the contract files were modified, a new factory can be created.
