@@ -28,10 +28,13 @@ state.var {
 }
 
 function constructor(name, symbol, decimals, initial_supply, owner)
-  local decimal_str = "1" .. string.rep("0", decimals)
   _init(name, symbol, decimals)
   _creator:set(owner)
-  _mint(owner, bignum.number(initial_supply) * bignum.number(decimal_str))
+  initial_supply = bignum.number(initial_supply)
+  if initial_supply > bignum.number(0) then
+    local decimal_str = "1" .. string.rep("0", decimals)
+    _mint(owner, initial_supply * bignum.number(decimal_str))
+  end
 end
 ]]
 
