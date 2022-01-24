@@ -66,8 +66,11 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
     contract_code = contract_code .. arc1_limited_approval
   end
 
-  return contract.deploy(contract_code, name, symbol, decimals, initial_supply, owner)
+  local address = contract.deploy(contract_code, name, symbol, decimals, initial_supply, owner)
 
+  contract.event("new_token", address)
+
+  return address
 end
 
 abi.register(new_token)
