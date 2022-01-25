@@ -27,7 +27,6 @@ end
 -- @param   account  (address)
 -- @event   addPauser(account)
 
-
 function addPauser(account)
   _typecheck(account, 'address')
 

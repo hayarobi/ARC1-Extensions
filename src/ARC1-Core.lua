@@ -83,9 +83,6 @@ function name()
   return _name:get()
 end
 
-function owner()
-  return _owner:get()
-end
 
 -- Get a token symbol
 -- @type    query
