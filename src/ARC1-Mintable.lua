@@ -79,7 +79,6 @@ function renounceMinter()
 end
 
 
-
 -- Mint new tokens at an account
 -- @type    call
 -- @param   account  (address) recipient's address
@@ -99,7 +98,6 @@ function mint(account, amount)
   -- contract.event("mint", system.getSender(), account, amount)
   contract.event("transfer", address0, account, amount)
 end
-
 
 abi.register(mint, addMinter, removeMinter, renounceMinter)
 abi.register_view(isMinter)

@@ -1,6 +1,0 @@
-{
-  "name" : "aergo-contract-ex/mintabletoken",
-  "source" : "mintableToken.lua",
-  "target" : "out.lua",
-  "tests": []
-}

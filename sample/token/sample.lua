@@ -1,5 +1,3 @@
-import "ARC1-Core"
-import "ARC1-Mintable"
 
 function constructor()
   _init("mintableToken", "MINT", 18)

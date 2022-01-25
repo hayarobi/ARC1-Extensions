@@ -1,6 +1,0 @@
-{
-  "name" : "ARC1-Extensions",
-  "source" : "src/ARC1-*.lua",
-  "target" : "target/out.lua",
-  "tests": [ "test/ship-token.lua" ]
-}
