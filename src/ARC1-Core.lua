@@ -13,8 +13,11 @@ state.var {
   _symbol = state.value(),        -- string
   _decimals = state.value(),      -- string
 
-  -- Pausable - default
+  -- Pausable
   _paused = state.value(),        -- boolean
+
+  -- Blacklist
+  _blacklist = state.map()        -- address -> boolean
 
 }
 

@@ -3,12 +3,6 @@
 -- Blacklist
 ------------------------------------------------------------------------------
 
-state.var {
-
-  -- Blacklist
-  _blacklist = state.map()    -- address -> boolean
-}
-
 
 -- Add accounts to blacklist.
 -- @type    call
