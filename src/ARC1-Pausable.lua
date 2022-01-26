@@ -5,7 +5,7 @@
 
 state.var {
 
-  -- pauable
+  -- pausable
   _pauser = state.map(),   -- address -> boolean
 }
 
