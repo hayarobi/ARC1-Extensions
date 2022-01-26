@@ -73,7 +73,7 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
 
   local address = contract.deploy(contract_code, name, symbol, decimals, initial_supply, options["max_supply"], owner)
 
-  contract.event("new_token", address)
+  contract.event("new_arc1_token", address)
 
   return address
 end
