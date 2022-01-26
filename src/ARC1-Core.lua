@@ -111,7 +111,11 @@ end
 -- @return  (ubig) balance of owner
 
 function balanceOf(owner)
-  _typecheck(owner, 'address')
+  if owner == nil then
+    owner = system.getSender()
+  else
+    _typecheck(owner, 'address')
+  end
 
   return _balances[owner] or bignum.number(0)
 end
