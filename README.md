@@ -102,10 +102,10 @@ function burn(amount)
 ### + ARC1 : Mintable
 ``` lua
 
--- set CAP
+-- set Max Supply
 -- @type    internal
 -- @param   amount   (ubig) amount of tokens to mint
-local function _setCAP(amount)
+local function _setMaxSupply(amount)
 
 -- Indicate if an account is a minter
 -- @type    query
@@ -137,6 +137,12 @@ function renounceMinter()
 -- @event   mint(TX sender, account, amount) -- tobe
 -- @event   transfer(address0, account, amount) 
 function mint(account, amount)
+
+-- return Max Supply
+-- @type    query
+-- @return  amount   (ubig) amount of tokens to mint
+function maxSupply()
+
 ```
 
 ### + ARC1 : Pausable
