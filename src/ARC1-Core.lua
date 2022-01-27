@@ -132,7 +132,6 @@ end
 
 abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 
-
 -- Hook "tokensReceived" function on the recipient after a 'transfer'
 -- @type internal
 -- @param   from   (address) sender's address
@@ -207,7 +206,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transfer(TX sender, to, amount)
+-- @event   transfer(nil, TX sender, to, amount)
 
 function transfer(to, amount, ...)
   _typecheck(to, 'address')
@@ -215,22 +214,21 @@ function transfer(to, amount, ...)
 
   _transfer(system.getSender(), to, amount, ...)
 
-  contract.event("transfer", system.getSender(), to, amount)
+  contract.event("transfer", nil, system.getSender(), to, amount)
 end
 
 
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of token to burn
--- @event   burn(TX sender, amount)
+-- @event   burn(nil, TX sender, amount)
 
 function burn(amount)
   _typecheck(amount, 'ubig')
 
   _burn(system.getSender(), amount)
 
---  contract.event("burn", system.getSender(), amount)
-  contract.event("transfer", system.getSender(), address0, amount)
+  contract.event("burn", nil, system.getSender(), amount)
 end
 
 

@@ -48,7 +48,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transferFrom(Tx sender, from, to, amount)
+-- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromAll(from, to, amount, ...)
   _typecheck(from, 'address')
@@ -58,8 +58,7 @@ function transferFromAll(from, to, amount, ...)
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _transfer(from, to, amount, ...)
 
-  -- contract.event("transferFrom", system.getSender(), from, to, amount)
-  contract.event("transfer", from, to, amount)
+  contract.event("transfer", system.getSender(), from, to, amount)
 end
 
 
@@ -67,7 +66,7 @@ end
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to send
--- @event   burnFrom(Tx sender, from, amount)
+-- @event   burn(Tx sender, from, amount)
 
 function burnFromAll(from, amount)
   _typecheck(from, 'address')
@@ -76,8 +75,7 @@ function burnFromAll(from, amount)
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _burn(from, amount)
 
-  -- contract.event("burnFrom", system.getSender(), from, amount)
-  contract.event("transfer", from, address0, amount)
+  contract.event("burn", system.getSender(), from, amount)
 end
 
 
