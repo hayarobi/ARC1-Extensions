@@ -5,20 +5,18 @@
 
 state.var {
   -- mintable
-  _minter = state.map(),   -- address -> boolean
-  _cap = state.value()     -- unsigned_bignum
+  _minter = state.map(),   	-- address -> boolean
+  _max_supply = state.value()     -- unsigned_bignum
 }
 
-
--- set CAP
+-- set Max Supply
 -- @type    internal
 -- @param   amount   (ubig) amount of mintable tokens
 
-local function _setCAP(amount)
+local function _setMaxSupply(amount)
   _typecheck(amount, 'ubig')
-  _cap:set(amount)
+  _max_supply:set(amount)
 end
-
 
 -- Indicate if an account is a minter
 -- @type    query
@@ -92,7 +90,7 @@ function mint(account, amount)
   _typecheck(amount, 'ubig')
 
   assert(isMinter(system.getSender()), "only minter can mint")
-  assert(not _cap:get() or (_totalSupply:get()+amount) <= _cap:get(), 'totalSupply is over the cap')
+  assert(not _max_supply:get() or (_totalSupply:get()+amount) <= _max_supply:get(), 'totalSupply is over MaxSupply')
 
   _mint(account, amount)
 
@@ -100,6 +98,13 @@ function mint(account, amount)
   contract.event("transfer", address0, account, amount)
 end
 
+-- return Max Supply
+-- @type    query
+-- @return  amount   (ubig) amount of tokens to mint
+
+function maxSupply()
+  return _max_supply:get() or bignum.number(0)
+end
 
 abi.register(mint, addMinter, removeMinter, renounceMinter)
-abi.register_view(isMinter)
+abi.register_view(isMinter, maxSupply)
