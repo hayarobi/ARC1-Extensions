@@ -87,14 +87,13 @@ local function _burn(from, amount)
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transfer(TX sender, to, amount)
+-- @event   transfer(nil, TX sender, to, amount)
 function transfer(to, amount, ...)
 
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of token to burn
--- @event   burn(TX sender, amount) -- tobe
--- @event   transfer(TX sender, address0, amount)
+-- @event   burn(nil, TX sender, amount) 
 function burn(amount)
 ```
 
@@ -134,8 +133,7 @@ function renounceMinter()
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @event   mint(TX sender, account, amount) -- tobe
--- @event   transfer(address0, account, amount) 
+-- @event   mint(account, amount) 
 function mint(account, amount)
 
 -- return Max Supply
@@ -208,16 +206,14 @@ function setApprovalForAll(operator, approved)
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transferFrom(Tx sender, from, to, amount) -- tobe
--- @event   transfer(from, to, amount)
+-- @event   transfer(Tx sender, from, to, amount) 
 function transferFromAll(from, to, amount, ...)
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to send
--- @event   burnFrom(Tx sender, from, amount) -- tobe
--- @event   transfer(from, address0, amount)
+-- @event   burn(Tx sender, from, amount) 
 function burnFromAll(from, amount)
 ```
 
@@ -257,16 +253,14 @@ function allowance(owner, spender)
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transferFrom(Tx sender, from, to, amount) -- tobe
--- @event   transfer(from, to, amount)
+-- @event   transfer(Tx sender, from, to, amount) 
 function transferFromLtd(from, to, amount, ...)
 
 -- Burn tokens from an account using the allowance mechanism
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to burn
--- @event   burnFrom(Tx sender, from, amount) -- tobe
--- @event   transfer(from, address0, amount)
+-- @event   burn(Tx sender, from, amount) 
 function burnFromLtd(from, amount)
 ```
 

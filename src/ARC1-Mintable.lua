@@ -77,13 +77,11 @@ function renounceMinter()
 end
 
 
-
 -- Mint new tokens at an account
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @event   mint(TX sender, account, amount) -- tobe
--- @event   transfer(address0, account, amount)
+-- @event   mint(account, amount) -- tobe
 
 function mint(account, amount)
   _typecheck(account, 'address')
@@ -91,11 +89,8 @@ function mint(account, amount)
 
   assert(isMinter(system.getSender()), "only minter can mint")
   assert(not _max_supply:get() or (_totalSupply:get()+amount) <= _max_supply:get(), 'totalSupply is over MaxSupply')
-
   _mint(account, amount)
-
-  -- contract.event("mint", system.getSender(), account, amount)
-  contract.event("transfer", address0, account, amount)
+  contract.event("mint", account, amount)
 end
 
 -- return Max Supply

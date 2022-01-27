@@ -88,7 +88,7 @@ end
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @event   transferFrom(Tx sender, from, to, amount)
+-- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromLtd(from, to, amount, ...)
   _typecheck(from, 'address')
@@ -101,8 +101,7 @@ function transferFromLtd(from, to, amount, ...)
   _transfer(from, to, amount, ...)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  -- contract.event("transferFrom", system.getSender(), from, to, amount)
-  contract.event("transfer", from, to, amount)
+  contract.event("transfer", system.getSender(), from, to, amount)
 end
 
 
@@ -110,7 +109,7 @@ end
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to burn
--- @event   burnFrom(Tx sender, from, amount)
+-- @event   burn(TX Sender, from, amount)
 
 function burnFromLtd(from, amount)
   _typecheck(from, 'address')
@@ -122,8 +121,7 @@ function burnFromLtd(from, amount)
   _burn(from, amount)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  -- contract.event("burnFrom", system.getSender(), from, amount)
-  contract.event("transfer", from, address0, amount)
+  contract.event("burn", system.getSender(), from, amount)
 end
 
 
