@@ -214,7 +214,7 @@ function transfer(to, amount, ...)
 
   _transfer(system.getSender(), to, amount, ...)
 
-  contract.event("transfer", nil, system.getSender(), to, amount)
+  contract.event("transfer", nil, system.getSender(), to, bignum.tostring(amount))
 end
 
 
@@ -228,7 +228,7 @@ function burn(amount)
 
   _burn(system.getSender(), amount)
 
-  contract.event("burn", nil, system.getSender(), amount)
+  contract.event("burn", nil, system.getSender(), bignum.tostring(amount))
 end
 
 

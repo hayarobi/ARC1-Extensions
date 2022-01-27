@@ -24,7 +24,7 @@ function approve(spender, amount)
 
   _allowance[system.getSender().."/".. spender] = amount
 
-  contract.event("approve", system.getSender(), spender, amount)
+  contract.event("approve", system.getSender(), spender, bignum.tostring(amount))
 end
 
 
@@ -42,7 +42,7 @@ function increaseAllowance(spender, amount)
 
   _allowance[system.getSender().."/".. spender] = _allowance[system.getSender().."/".. spender] + amount
 
-  contract.event("increaseAllowance", system.getSender(), spender, amount)
+  contract.event("increaseAllowance", system.getSender(), spender, bignum.tostring(amount))
 end
 
 
@@ -64,7 +64,7 @@ function decreaseAllowance(spender, amount)
     _allowance[system.getSender().."/".. spender] = _allowance[system.getSender().."/".. spender] - amount
   end
 
-  contract.event("decreaseAllowance", system.getSender(), spender, amount)
+  contract.event("decreaseAllowance", system.getSender(), spender, bignum.tostring(amount))
 end
 
 
@@ -101,7 +101,7 @@ function transferFromLtd(from, to, amount, ...)
   _transfer(from, to, amount, ...)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  contract.event("transfer", system.getSender(), from, to, amount)
+  contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
 end
 
 
@@ -121,7 +121,7 @@ function burnFromLtd(from, amount)
   _burn(from, amount)
   _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
 
-  contract.event("burn", system.getSender(), from, amount)
+  contract.event("burn", system.getSender(), from, bignum.tostring(amount))
 end
 
 
