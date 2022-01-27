@@ -103,7 +103,7 @@ end
 -- @return  amount   (ubig) amount of tokens to mint
 
 function maxSupply()
-  return _max_supply:get()
+  return _max_supply:get() or bignum.number(0)
 end
 
 abi.register(mint, addMinter, removeMinter, renounceMinter)
