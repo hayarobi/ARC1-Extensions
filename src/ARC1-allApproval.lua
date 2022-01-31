@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------------
 
 state.var {
-
   -- All Approval
   _operators = state.map(),   -- address/address -> boolean
 }
@@ -53,7 +52,7 @@ end
 function transferFromAll(from, to, amount, ...)
   _typecheck(from, 'address')
   _typecheck(to, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _transfer(from, to, amount, ...)
@@ -70,7 +69,7 @@ end
 
 function burnFromAll(from, amount)
   _typecheck(from, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _burn(from, amount)

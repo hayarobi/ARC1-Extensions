@@ -85,11 +85,13 @@ end
 
 function mint(account, amount)
   _typecheck(account, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(isMinter(system.getSender()), "only minter can mint")
   assert(not _max_supply:get() or (_totalSupply:get()+amount) <= _max_supply:get(), 'totalSupply is over MaxSupply')
+
   _mint(account, amount)
+
   contract.event("mint", account, bignum.tostring(amount))
 end
 

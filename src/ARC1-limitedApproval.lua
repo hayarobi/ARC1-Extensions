@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------------
 
 state.var {
-
   -- limited approval
   _allowance = state.map(),   -- address/address -> unsigned_bignum
 }
@@ -18,7 +17,7 @@ state.var {
 
 function approve(spender, amount)
   _typecheck(spender, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(system.getSender() ~= spender, "cannot set approve self")
 
@@ -36,7 +35,7 @@ end
 
 function increaseAllowance(spender, amount)
   _typecheck(spender, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(_allowance[system.getSender().."/".. spender], "no approved")
 
@@ -54,7 +53,7 @@ end
 
 function decreaseAllowance(spender, amount)
   _typecheck(spender, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(_allowance[system.getSender().."/".. spender], "no approved")
 
@@ -93,7 +92,7 @@ end
 function transferFromLtd(from, to, amount, ...)
   _typecheck(from, 'address')
   _typecheck(to, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(_allowance[from .."/".. system.getSender()], "no approved")
   assert(_allowance[from .."/".. system.getSender()] >= amount, "insufficient allowance")
@@ -113,7 +112,7 @@ end
 
 function burnFromLtd(from, amount)
   _typecheck(from, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   assert(_allowance[from .."/".. system.getSender()], "no approved")
   assert(_allowance[from .."/".. system.getSender()] >= amount, "insufficient allowance")
