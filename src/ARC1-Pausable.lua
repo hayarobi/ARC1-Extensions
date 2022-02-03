@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------------
 
 state.var {
-
   -- pausable
   _pauser = state.map(),   -- address -> boolean
 }
@@ -74,7 +73,6 @@ end
 -- @return  (bool) true/false
 
 function paused()
-
   return (_paused:get() == true)
 end
 

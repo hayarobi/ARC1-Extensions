@@ -54,6 +54,14 @@ local function _typecheck(x, t)
   end
 end
 
+function _check_bignum(x)
+  if type(x) == 'string' then
+    assert(string.match(x, '[^0-9]') == nil, "amount contains invalid character")
+    x = bignum.number(x)
+  end
+  _typecheck(x, 'ubig')
+  return x
+end
 
 -- call this at constructor
 -- @type internal
@@ -208,7 +216,7 @@ end
 
 function transfer(to, amount, ...)
   _typecheck(to, 'address')
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   _transfer(system.getSender(), to, amount, ...)
 
@@ -222,7 +230,7 @@ end
 -- @event   burn(nil, TX sender, amount)
 
 function burn(amount)
-  _typecheck(amount, 'ubig')
+  amount = _check_bignum(amount)
 
   _burn(system.getSender(), amount)
 
