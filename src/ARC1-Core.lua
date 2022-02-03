@@ -140,9 +140,7 @@ abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
 
 local function _callTokensReceived(from, to, amount, ...)
-
-  -- if to ~= system.getContractID() and system.isContract(to) then
-  if to ~= address0 and system.isContract(to) then
+  if system.isContract(to) then
     contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
   end
 end
