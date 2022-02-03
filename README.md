@@ -60,6 +60,7 @@ function totalSupply()
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig) amount of token to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
 local function _callTokensReceived(from, to, amount, ...)
 
 -- Transfer tokens from an account to another
@@ -67,13 +68,15 @@ local function _callTokensReceived(from, to, amount, ...)
 -- @param   from    (address) sender's address
 -- @param   to      (address) recipient's address
 -- @param   amount   (ubig)   amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @param   ...     addtional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _callTokensReceived(from, to, amount, ...)
 local function _transfer(from, to, amount, ...)
 
 -- Mint new tokens to an account
 -- @type    internal
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to mint
+-- @return  return _callTokensReceived(from, to, amount, ...)
 local function _mint(to, amount, ...)
 
 -- Burn tokens from an account
@@ -87,6 +90,7 @@ local function _burn(from, amount)
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(system.getSender(), to, amount, ...)
 -- @event   transfer(nil, TX sender, to, amount)
 function transfer(to, amount, ...)
 
@@ -133,6 +137,7 @@ function renounceMinter()
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
+-- @return _mint(account, amount)
 -- @event   mint(account, amount) 
 function mint(account, amount)
 
@@ -159,6 +164,7 @@ function addPauser(account)
 
 -- Remove the Pauser Role form an account
 -- @type    call
+-- @return _mint(account, amount)
 -- @param   account  (address)
 -- @event   removePauser(account)
 function removePauser(account)
@@ -206,6 +212,7 @@ function setApprovalForAll(operator, approved)
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(from, to, amount, ...)
 -- @event   transfer(Tx sender, from, to, amount) 
 function transferFromAll(from, to, amount, ...)
 
@@ -253,6 +260,7 @@ function allowance(owner, spender)
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(Tx sender, to, amount, ...)
 -- @event   transfer(Tx sender, from, to, amount) 
 function transferFromLtd(from, to, amount, ...)
 
