@@ -68,7 +68,7 @@ local function _callTokensReceived(from, to, amount, ...)
 -- @param   from    (address) sender's address
 -- @param   to      (address) recipient's address
 -- @param   amount   (ubig)   amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @param   ...     addtional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  _callTokensReceived(from, to, amount, ...)
 local function _transfer(from, to, amount, ...)
 

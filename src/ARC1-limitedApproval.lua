@@ -104,12 +104,11 @@ function transferFromLtd(from, to, amount, ...)
   assert(_allowance[pair], "not approved")
   assert(_allowance[pair] >= amount, "insufficient allowance")
 
-  re = _transfer(from, to, amount, ...)
   _allowance[pair] = _allowance[pair] - amount
 
   contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
 
-  return re
+  return _transfer(from, to, amount, ...)
 end
 
 
