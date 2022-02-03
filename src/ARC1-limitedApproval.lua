@@ -22,7 +22,7 @@ function approve(spender, amount)
 
   assert(system.getSender() ~= spender, "cannot set approve self")
 
-  _allowance[system.getSender().."/".. spender] = amount
+  _allowance[system.getSender() .. "/" .. spender] = amount
 
   contract.event("approve", system.getSender(), spender, bignum.tostring(amount))
 end
@@ -38,9 +38,11 @@ function increaseAllowance(spender, amount)
   _typecheck(spender, 'address')
   _typecheck(amount, 'ubig')
 
-  assert(_allowance[system.getSender().."/".. spender], "no approved")
+  local pair = system.getSender() .. "/" .. spender
 
-  _allowance[system.getSender().."/".. spender] = _allowance[system.getSender().."/".. spender] + amount
+  assert(_allowance[pair], "not approved")
+
+  _allowance[pair] = _allowance[pair] + amount
 
   contract.event("increaseAllowance", system.getSender(), spender, bignum.tostring(amount))
 end
@@ -56,12 +58,14 @@ function decreaseAllowance(spender, amount)
   _typecheck(spender, 'address')
   _typecheck(amount, 'ubig')
 
-  assert(_allowance[system.getSender().."/".. spender], "no approved")
+  local pair = system.getSender() .. "/" .. spender
 
-  if _allowance[system.getSender().."/".. spender] < amount then
-    _allowance[system.getSender().."/".. spender] = 0
+  assert(_allowance[pair], "not approved")
+
+  if _allowance[pair] < amount then
+    _allowance[pair] = 0
   else
-    _allowance[system.getSender().."/".. spender] = _allowance[system.getSender().."/".. spender] - amount
+    _allowance[pair] = _allowance[pair] - amount
   end
 
   contract.event("decreaseAllowance", system.getSender(), spender, bignum.tostring(amount))
@@ -95,11 +99,13 @@ function transferFromLtd(from, to, amount, ...)
   _typecheck(to, 'address')
   _typecheck(amount, 'ubig')
 
-  assert(_allowance[from .."/".. system.getSender()], "no approved")
-  assert(_allowance[from .."/".. system.getSender()] >= amount, "insufficient allowance")
+  local pair = from .. "/" .. system.getSender()
+
+  assert(_allowance[pair], "not approved")
+  assert(_allowance[pair] >= amount, "insufficient allowance")
 
   _transfer(from, to, amount, ...)
-  _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
+  _allowance[pair] = _allowance[pair] - amount
 
   contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
 end
@@ -115,11 +121,13 @@ function burnFromLtd(from, amount)
   _typecheck(from, 'address')
   _typecheck(amount, 'ubig')
 
-  assert(_allowance[from .."/".. system.getSender()], "no approved")
-  assert(_allowance[from .."/".. system.getSender()] >= amount, "insufficient allowance")
+  local pair = from .. "/" .. system.getSender()
+
+  assert(_allowance[pair], "not approved")
+  assert(_allowance[pair] >= amount, "insufficient allowance")
 
   _burn(from, amount)
-  _allowance[from .."/".. system.getSender()] = _allowance[from .."/".. system.getSender()] - amount
+  _allowance[pair] = _allowance[pair] - amount
 
   contract.event("burn", system.getSender(), from, bignum.tostring(amount))
 end
