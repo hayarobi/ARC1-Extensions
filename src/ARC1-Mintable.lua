@@ -81,7 +81,7 @@ end
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @return  value returned from '_mint' function
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   mint(account, amount) 
 
 function mint(account, amount)

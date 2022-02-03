@@ -145,7 +145,7 @@ abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 -- @param   from   (address) sender's address
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig) amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @param   ...    additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _callTokensReceived(from, to, amount, ...)
@@ -160,9 +160,9 @@ end
 -- @type    internal
 -- @param   from    (address) sender's address
 -- @param   to      (address) recipient's address
--- @param   amount   (ubig)   amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  value returned from '_callTokensReceived' function
+-- @param   amount  (ubig)    amount of token to send
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _transfer(from, to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -182,7 +182,7 @@ end
 -- @type    internal
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to mint
--- @return  value returned from '_callTokensReceived' function
+-- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _mint(to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -215,8 +215,8 @@ end
 -- @type    call
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  value returned from '_transfer' function
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(nil, TX sender, to, amount)
 
 function transfer(to, amount, ...)

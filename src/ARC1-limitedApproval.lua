@@ -90,8 +90,8 @@ end
 -- @param   from   (address) sender's address
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  value returned from '_transfer' function
+-- @param   ...    additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromLtd(from, to, amount, ...)

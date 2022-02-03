@@ -17,14 +17,14 @@ ARC1-Extensions additionally includes functions for managing bad users (`Blaskli
 ``` lua
 -- Type check
 -- @type internal
--- @param x variable to check
--- @param t (string) expected type
+-- @param x   variable to check
+-- @param t   (string) expected type
 local function _typecheck(x, t) end
 
 -- Call this at constructor
 -- @type internal
--- @param name (string) name of this token
--- @param symbol (string) symbol of this token
+-- @param name     (string) name of this token
+-- @param symbol   (string) symbol of this token
 -- @param decimals (number) decimals of this token
 local function _init(name, symbol, decimals)
 
@@ -59,24 +59,24 @@ function totalSupply()
 -- @param   from   (address) sender's address
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig) amount of token to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
+-- @param   ...    additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 local function _callTokensReceived(from, to, amount, ...)
 
 -- Transfer tokens from an account to another
 -- @type    internal
 -- @param   from    (address) sender's address
 -- @param   to      (address) recipient's address
--- @param   amount   (ubig)   amount of token to send
--- @param   ...     addtional data, is sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _callTokensReceived(from, to, amount, ...)
+-- @param   amount  (ubig)    amount of token to send
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 local function _transfer(from, to, amount, ...)
 
 -- Mint new tokens to an account
 -- @type    internal
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to mint
--- @return  return _callTokensReceived(from, to, amount, ...)
+-- @return  value returned from 'tokensReceived' callback, or nil
 local function _mint(to, amount, ...)
 
 -- Burn tokens from an account
@@ -89,8 +89,8 @@ local function _burn(from, amount)
 -- @type    call
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _transfer(system.getSender(), to, amount, ...)
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(nil, TX sender, to, amount)
 function transfer(to, amount, ...)
 
@@ -137,7 +137,7 @@ function renounceMinter()
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @return _mint(account, amount)
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   mint(account, amount) 
 function mint(account, amount)
 
@@ -164,7 +164,6 @@ function addPauser(account)
 
 -- Remove the Pauser Role form an account
 -- @type    call
--- @return _mint(account, amount)
 -- @param   account  (address)
 -- @event   removePauser(account)
 function removePauser(account)
@@ -211,8 +210,8 @@ function setApprovalForAll(operator, approved)
 -- @param   from    (address) sender's address
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _transfer(from, to, amount, ...)
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(Tx sender, from, to, amount) 
 function transferFromAll(from, to, amount, ...)
 
@@ -259,8 +258,8 @@ function allowance(owner, spender)
 -- @param   from   (address) sender's address
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
--- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _transfer(Tx sender, to, amount, ...)
+-- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(Tx sender, from, to, amount) 
 function transferFromLtd(from, to, amount, ...)
 
@@ -303,6 +302,6 @@ Contracts, that want to handle tokens, must implement the following functions to
 -- @param   operator    (address) a address which called token 'transfer' function
 -- @param   from        (address) a sender's address
 -- @param   value       (ubig)    amount of tokens to send
--- @param   ...         addtional data, by-passed from 'transfer' arguments
+-- @param   ...         additional data, by-passed from 'transfer' arguments
 function tokensReceived(operator, from, value, ...)
 ```
