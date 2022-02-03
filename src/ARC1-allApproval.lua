@@ -47,7 +47,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _transfer(from, to, amount, ...)
+-- @return  value returned from '_transfer' function
 -- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromAll(from, to, amount, ...)

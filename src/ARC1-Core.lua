@@ -146,7 +146,7 @@ abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig) amount of token to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
+-- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _callTokensReceived(from, to, amount, ...)
   if system.isContract(to) then
@@ -162,7 +162,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount   (ubig)   amount of token to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _callTokensReceived(from, to, amount, ...)
+-- @return  value returned from '_callTokensReceived' function
 
 local function _transfer(from, to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -182,7 +182,7 @@ end
 -- @type    internal
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to mint
--- @return  return _callTokensReceived(from, to, amount, ...)
+-- @return  value returned from '_callTokensReceived' function
 
 local function _mint(to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -216,7 +216,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
--- @return  _transfer(system.getSender(), to, amount, ...)
+-- @return  value returned from '_transfer' function
 -- @event   transfer(nil, TX sender, to, amount)
 
 function transfer(to, amount, ...)

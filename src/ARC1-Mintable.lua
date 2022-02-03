@@ -81,7 +81,7 @@ end
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @return _mint(account, amount)
+-- @return  value returned from '_mint' function
 -- @event   mint(account, amount) 
 
 function mint(account, amount)
