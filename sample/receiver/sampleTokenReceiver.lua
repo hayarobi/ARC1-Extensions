@@ -10,6 +10,7 @@ end
 
 -- ************************************************
 -- This function is token receive hook
+
 function tokensReceived(operator, from, value, success, ...)
   if success ~= true then
     error("contract is fail")
@@ -19,6 +20,9 @@ function tokensReceived(operator, from, value, success, ...)
 
   -- send same amount of aergo to token sender
   contract.send(from, value)
+  
+  return nil
+
 end
 -- ************************************************
 

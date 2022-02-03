@@ -91,6 +91,7 @@ end
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(Tx sender, to, amount, ...)
 -- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromLtd(from, to, amount, ...)
@@ -103,10 +104,12 @@ function transferFromLtd(from, to, amount, ...)
   assert(_allowance[pair], "not approved")
   assert(_allowance[pair] >= amount, "insufficient allowance")
 
-  _transfer(from, to, amount, ...)
+  re = _transfer(from, to, amount, ...)
   _allowance[pair] = _allowance[pair] - amount
 
   contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
+
+  return re
 end
 
 

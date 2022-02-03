@@ -47,6 +47,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(from, to, amount, ...)
 -- @event   transfer(TX Sender, from, to, amount)
 
 function transferFromAll(from, to, amount, ...)
@@ -55,9 +56,10 @@ function transferFromAll(from, to, amount, ...)
   amount = _check_bignum(amount)
 
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
-  _transfer(from, to, amount, ...)
 
   contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
+
+  return _transfer(from, to, amount, ...)
 end
 
 

@@ -81,7 +81,8 @@ end
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
--- @event   mint(account, amount) -- tobe
+-- @return _mint(account, amount)
+-- @event   mint(account, amount) 
 
 function mint(account, amount)
   _typecheck(account, 'address')
@@ -90,9 +91,9 @@ function mint(account, amount)
   assert(isMinter(system.getSender()), "only minter can mint")
   assert(not _max_supply:get() or (_totalSupply:get()+amount) <= _max_supply:get(), 'totalSupply is over MaxSupply')
 
-  _mint(account, amount)
-
   contract.event("mint", account, bignum.tostring(amount))
+
+  return _mint(account, amount)
 end
 
 -- return Max Supply

@@ -146,10 +146,13 @@ abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 -- @param   to     (address) recipient's address
 -- @param   amount (ubig) amount of token to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
 
 local function _callTokensReceived(from, to, amount, ...)
   if system.isContract(to) then
-    contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
+    return contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
+  else
+    return nil
   end
 end
 
@@ -159,6 +162,7 @@ end
 -- @param   to      (address) recipient's address
 -- @param   amount   (ubig)   amount of token to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _callTokensReceived(from, to, amount, ...)
 
 local function _transfer(from, to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -170,13 +174,15 @@ local function _transfer(from, to, amount, ...)
   _balances[from] = _balances[from] - amount
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
 
-  _callTokensReceived(from, to, amount, ...)
+  return _callTokensReceived(from, to, amount, ...)
+
 end
 
 -- Mint new tokens to an account
 -- @type    internal
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to mint
+-- @return  return _callTokensReceived(from, to, amount, ...)
 
 local function _mint(to, amount, ...)
   assert(not _paused:get(), "paused contract")
@@ -185,7 +191,7 @@ local function _mint(to, amount, ...)
   _totalSupply:set((_totalSupply:get() or bignum.number(0)) + amount)
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
 
-  _callTokensReceived(system.getSender(), to, amount, ...)
+  return _callTokensReceived(system.getSender(), to, amount, ...)
 end
 
 
@@ -205,22 +211,21 @@ local function _burn(from, amount)
 end
 
 
-
-
 -- Transfer tokens to an account (from TX sender)
 -- @type    call
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     addtional data, MUST be sent unaltered in call to 'tokensReceived' on 'to'
+-- @return  _transfer(system.getSender(), to, amount, ...)
 -- @event   transfer(nil, TX sender, to, amount)
 
 function transfer(to, amount, ...)
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
 
-  _transfer(system.getSender(), to, amount, ...)
-
   contract.event("transfer", nil, system.getSender(), to, bignum.tostring(amount))
+
+  return _transfer(system.getSender(), to, amount, ...)
 end
 
 
