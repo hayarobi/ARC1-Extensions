@@ -47,6 +47,12 @@ local function _typecheck(x, t)
     assert(bignum.isbignum(x), string.format("invalid type: %s != %s", type(x), t))
     assert(x >= bignum.number(0), string.format("%s must be positive number", bignum.tostring(x)))
 
+  elseif (x and t == 'uint') then   -- a positive number
+
+    assert(type(x) == 'number', string.format("invalid type: %s != number", type(x)))
+    assert(math.floor(x) == x, "the number must be an integer")
+    assert(x >= 0, "the number must be 0 or positive")
+
   else
     -- check default lua types
     assert(type(x) == t, string.format("invalid type: %s != %s", type(x), t or 'nil'))
@@ -73,7 +79,7 @@ local function _init(name, symbol, decimals)
 
   _typecheck(name, 'string')
   _typecheck(symbol, 'string')
-  _typecheck(decimals, 'number')
+  _typecheck(decimals, 'uint')
 
   assert(decimals > 0)
 
