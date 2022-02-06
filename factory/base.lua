@@ -30,15 +30,12 @@ state.var {
 function constructor(name, symbol, decimals, initial_supply, max_supply, owner)
   _init(name, symbol, decimals)
   _creator:set(owner)
-  initial_supply = bignum.number(initial_supply)
+  local decimal_str = "1" .. string.rep("0", decimals)
   if initial_supply > bignum.number(0) then
-    local decimal_str = "1" .. string.rep("0", decimals)
     _mint(owner, initial_supply * bignum.number(decimal_str))
   end
   if max_supply then
-    max_supply = bignum.number(max_supply)
-    assert(max_supply > bignum.number(0), "invalid max supply")
-    _setMaxSupply(max_supply)
+    _setMaxSupply(max_supply * bignum.number(decimal_str))
   end
 end
 ]]
@@ -71,7 +68,17 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
     contract_code = contract_code .. arc1_limited_approval
   end
 
-  local address = contract.deploy(contract_code, name, symbol, decimals, initial_supply, options["max_supply"], owner)
+  if not bignum.isbignum(initial_supply) then
+    initial_supply = bignum.number(initial_supply)
+  end
+  assert(initial_supply >= bignum.number(0), "invalid initial supply")
+  local max_supply = options["max_supply"]
+  if max_supply then
+    max_supply = bignum.number(max_supply)
+    assert(max_supply >= initial_supply, "invalid max supply")
+  end
+
+  local address = contract.deploy(contract_code, name, symbol, decimals, initial_supply, max_supply, owner)
 
   contract.event("new_arc1_token", address)
 
