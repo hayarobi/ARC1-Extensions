@@ -40,17 +40,27 @@ Here is an example:
 
 ```lua
 local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
-                            bignum.number(1000000), {mintable=true,blocklist=true})
+                            '1000000', {mintable=true,blocklist=true})
 ```
 
-It can also be called from herajs, herapy, libaergo...
+And how to inform a max supply (for mintable tokens):
+
+```lua
+local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
+                            '1000000', {mintable=true,max_supply='5000000'})
+```
+
+> :warning: Notice that the `initial_supply` and `max_supply` do not contain
+> the decimals. They can be either string or bignum.
+
+The factory can also be called from herajs, herapy, libaergo...
 
 
 ## Token Factory Address
 
 <table>
-  <tr><td>testnet</td><td>Amg1tMCUzsRuGjUiWihbCwCmufdNGQAui6N6QMAPpz4wC4Y7eM1g</td></tr>
-  <tr><td>alphanet</td><td>Amgu52QrSVmLMJ8DMZnksNEgY164AaMKihCeowzVcmz6KQz5xXp2</td></tr>
+  <tr><td>testnet</td><td>AmggWvbwQGUxXkk5BGAnmv3C3VocveuaPQDb8N7QDYbi6FkAJeBs</td></tr>
+  <tr><td>alphanet</td><td>AmhAdUDbfmDR3sCreuqnrVS5pk31a8kf8aMieuzwSJQWdMi5Ukpe</td></tr>
 </table>
 
 
