@@ -40,7 +40,7 @@ Here is an example:
 
 ```lua
 local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
-                            '1000000', {mintable=true,blocklist=true})
+                            '1000000', {mintable=true,blacklist=true})
 ```
 
 And how to inform a max supply (for mintable tokens):
