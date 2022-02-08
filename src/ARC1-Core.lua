@@ -245,7 +245,7 @@ function burn(amount)
 
   _burn(system.getSender(), amount)
 
-  contract.event("burn", nil, system.getSender(), bignum.tostring(amount))
+  contract.event("burn", system.getSender(), bignum.tostring(amount), nil)
 end
 
 

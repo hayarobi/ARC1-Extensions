@@ -130,7 +130,7 @@ function burnFromLtd(from, amount)
   _burn(from, amount)
   _allowance[pair] = _allowance[pair] - amount
 
-  contract.event("burn", system.getSender(), from, bignum.tostring(amount))
+  contract.event("burn", from, bignum.tostring(amount), system.getSender())
 end
 
 

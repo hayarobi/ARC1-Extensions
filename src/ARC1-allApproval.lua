@@ -76,7 +76,7 @@ function burnFromAll(from, amount)
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
   _burn(from, amount)
 
-  contract.event("burn", system.getSender(), from, bignum.tostring(amount))
+  contract.event("burn", from, bignum.tostring(amount), system.getSender())
 end
 
 
