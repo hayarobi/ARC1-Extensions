@@ -5,8 +5,8 @@
 
 state.var {
   -- mintable
-  _minter = state.map(),   	-- address -> boolean
-  _max_supply = state.value()     -- unsigned_bignum
+  _minter = state.map(),       -- address -> boolean
+  _max_supply = state.value()  -- unsigned_bignum
 }
 
 -- set Max Supply
@@ -29,7 +29,6 @@ function isMinter(account)
   return (account == system.getCreator()) or (_minter[account]==true)
 end
 
-
 -- Add an account to minters
 -- @type    call
 -- @param   account  (address)
@@ -38,13 +37,12 @@ end
 function addMinter(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "only contract owner can add to minter")
+  assert(system.getSender() == system.getCreator(), "ARC1: only the contract owner can add a minter")
 
   _minter[account] = true
 
   contract.event("addMinter", account)
 end
-
 
 -- Remove an account from minters
 -- @type    call
@@ -54,26 +52,27 @@ end
 function removeMinter(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "only contract owner can remove minter role")
-  assert(isMinter(account), "only minter can be removed minter role")
+  assert(system.getSender() == system.getCreator(), "ARC1: only the contract owner can remove a minter")
+  assert(account ~= system.getCreator(), "ARC1: the contract owner is always a minter")
+  assert(isMinter(account), "ARC1: not a minter")
 
-  _minter[account] = nil
+  _minter:delete(account)
 
   contract.event("removeMinter", account)
 end
-
 
 -- Renounce the Minter Role of TX sender
 -- @type    call
 -- @event   removeMinter(TX sender)
 
 function renounceMinter()
-  assert(system.getSender() ~= system.getCreator(), "contract owner can't renounce minter role")
-  assert(isMinter(system.getSender()), "only minter can renounce minter role")
+  local sender = system.getSender()
+  assert(sender ~= system.getCreator(), "ARC1: contract owner can't renounce minter role")
+  assert(isMinter(sender), "ARC1: only minter can renounce minter role")
 
-  _minter[system.getSender()] = nil
+  _minter:delete(sender)
 
-  contract.event("removeMinter", system.getSender())
+  contract.event("removeMinter", sender)
 end
 
 
