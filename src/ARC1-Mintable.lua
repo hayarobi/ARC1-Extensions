@@ -81,10 +81,11 @@ end
 -- @type    call
 -- @param   account  (address) recipient's address
 -- @param   amount   (ubig) amount of tokens to mint
+-- @param   ...      additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   mint(account, amount) 
 
-function mint(account, amount)
+function mint(account, amount, ...)
   _typecheck(account, 'address')
   amount = _check_bignum(amount)
 
@@ -93,7 +94,7 @@ function mint(account, amount)
 
   contract.event("mint", account, bignum.tostring(amount))
 
-  return _mint(account, amount)
+  return _mint(account, amount, ...)
 end
 
 -- return Max Supply
