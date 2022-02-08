@@ -57,7 +57,7 @@ function transferFromAll(from, to, amount, ...)
 
   assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
 
-  contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
+  contract.event("transfer", from, to, bignum.tostring(amount), system.getSender())
 
   return _transfer(from, to, amount, ...)
 end

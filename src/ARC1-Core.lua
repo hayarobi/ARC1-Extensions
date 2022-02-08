@@ -229,7 +229,7 @@ function transfer(to, amount, ...)
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
 
-  contract.event("transfer", nil, system.getSender(), to, bignum.tostring(amount))
+  contract.event("transfer", system.getSender(), to, bignum.tostring(amount), nil)
 
   return _transfer(system.getSender(), to, amount, ...)
 end

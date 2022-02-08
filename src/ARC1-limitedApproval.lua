@@ -106,7 +106,7 @@ function transferFromLtd(from, to, amount, ...)
 
   _allowance[pair] = _allowance[pair] - amount
 
-  contract.event("transfer", system.getSender(), from, to, bignum.tostring(amount))
+  contract.event("transfer", from, to, bignum.tostring(amount), system.getSender())
 
   return _transfer(from, to, amount, ...)
 end
