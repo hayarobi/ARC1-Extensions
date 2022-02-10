@@ -50,7 +50,7 @@ end
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(TX Sender, from, to, amount)
 
-function transferFromAll(from, to, amount, ...)
+function transferFrom(from, to, amount, ...)
   _typecheck(from, 'address')
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
@@ -69,7 +69,7 @@ end
 -- @param   amount  (ubig)    amount of tokens to send
 -- @event   burn(Tx sender, from, amount)
 
-function burnFromAll(from, amount)
+function burnFrom(from, amount)
   _typecheck(from, 'address')
   amount = _check_bignum(amount)
 
@@ -80,5 +80,5 @@ function burnFromAll(from, amount)
 end
 
 
-abi.register(transferFromAll, setApprovalForAll, burnFromAll)
+abi.register(setApprovalForAll, transferFrom, burnFrom)
 abi.register_view(isApprovedForAll)

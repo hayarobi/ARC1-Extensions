@@ -94,7 +94,7 @@ end
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(TX Sender, from, to, amount)
 
-function transferFromLtd(from, to, amount, ...)
+function limitedTransferFrom(from, to, amount, ...)
   _typecheck(from, 'address')
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
@@ -118,7 +118,7 @@ end
 -- @param   amount  (ubig)    amount of tokens to burn
 -- @event   burn(TX Sender, from, amount)
 
-function burnFromLtd(from, amount)
+function limitedBurnFrom(from, amount)
   _typecheck(from, 'address')
   amount = _check_bignum(amount)
 
@@ -134,5 +134,5 @@ function burnFromLtd(from, amount)
 end
 
 
-abi.register(approve,increaseAllowance,decreaseAllowance,transferFromLtd,burnFromLtd)
+abi.register(approve, increaseAllowance, decreaseAllowance, limitedTransferFrom, limitedBurnFrom)
 abi.register_view(allowance)

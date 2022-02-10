@@ -213,14 +213,14 @@ function setApprovalForAll(operator, approved)
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(Tx sender, from, to, amount) 
-function transferFromAll(from, to, amount, ...)
+function transferFrom(from, to, amount, ...)
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to send
 -- @event   burn(Tx sender, from, amount) 
-function burnFromAll(from, amount)
+function burnFrom(from, amount)
 ```
 
 ### + ARC1 : Limited approval
@@ -261,14 +261,14 @@ function allowance(owner, spender)
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(Tx sender, from, to, amount) 
-function transferFromLtd(from, to, amount, ...)
+function limitedTransferFrom(from, to, amount, ...)
 
 -- Burn tokens from an account using the allowance mechanism
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to burn
 -- @event   burn(Tx sender, from, amount) 
-function burnFromLtd(from, amount)
+function limitedBurnFrom(from, amount)
 ```
 
 ### + ARC1 : Blacklist
