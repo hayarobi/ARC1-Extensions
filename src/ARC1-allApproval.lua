@@ -15,9 +15,8 @@ state.var {
 -- @return  (bool) true/false
 
 function isApprovedForAll(owner, operator)
-  return (owner == operator) or (_operators[owner.."/".. operator] == true)
+  return _operators[owner .. "/" .. operator] == true
 end
-
 
 -- Allow an account to use all TX sender's tokens
 -- @type    call
@@ -29,17 +28,18 @@ function setApprovalForAll(operator, approved)
   _typecheck(operator, 'address')
   _typecheck(approved, 'boolean')
 
-  assert(system.getSender() ~= operator, "cannot set approve self as operator")
+  local sender = system.getSender()
+
+  assert(sender ~= operator, "cannot approve self as operator")
 
   if approved then
-     _operators[system.getSender().."/".. operator] = true
+    _operators[sender .. "/" .. operator] = true
   else
-    _operators[system.getSender().."/".. operator] = nil
+    _operators[sender .. "/" .. operator] = nil
   end
 
-  contract.event("setApprovalForAll", system.getSender(), operator, approved)
+  contract.event("setApprovalForAll", sender, operator, approved)
 end
-
 
 -- Transfer tokens from an account to another, Tx sender have to be approved to spend from the account
 -- @type    call
@@ -55,13 +55,15 @@ function transferFrom(from, to, amount, ...)
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
 
-  assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
+  local operator = system.getSender()
 
-  contract.event("transfer", from, to, bignum.tostring(amount), system.getSender())
+  assert(operator ~= from, "use the transfer function")
+  assert(isApprovedForAll(from, operator), "caller is not approved for holder")
+
+  contract.event("transfer", from, to, bignum.tostring(amount), operator)
 
   return _transfer(from, to, amount, ...)
 end
-
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account
 -- @type    call
@@ -73,10 +75,14 @@ function burnFrom(from, amount)
   _typecheck(from, 'address')
   amount = _check_bignum(amount)
 
-  assert(isApprovedForAll(from, system.getSender()), "caller is not approved for holder")
-  _burn(from, amount)
+  local operator = system.getSender()
 
-  contract.event("burn", from, bignum.tostring(amount), system.getSender())
+  assert(operator ~= from, "use the burn function")
+  assert(isApprovedForAll(from, operator), "caller is not approved for holder")
+
+  contract.event("burn", from, bignum.tostring(amount), operator)
+
+  _burn(from, amount)
 end
 
 
