@@ -19,7 +19,7 @@ function approve(spender, amount)
   _typecheck(spender, 'address')
   amount = _check_bignum(amount)
 
-  assert(system.getSender() ~= spender, "cannot set approve self")
+  assert(system.getSender() ~= spender, "ARC1: cannot set approve self")
 
   _allowance[system.getSender() .. "/" .. spender] = amount
 
@@ -39,7 +39,7 @@ function increaseAllowance(spender, amount)
 
   local pair = system.getSender() .. "/" .. spender
 
-  assert(_allowance[pair], "not approved")
+  assert(_allowance[pair], "ARC1: not approved")
 
   _allowance[pair] = _allowance[pair] + amount
 
@@ -59,7 +59,7 @@ function decreaseAllowance(spender, amount)
 
   local pair = system.getSender() .. "/" .. spender
 
-  assert(_allowance[pair], "not approved")
+  assert(_allowance[pair], "ARC1: not approved")
 
   if _allowance[pair] < amount then
     _allowance[pair] = 0
@@ -101,8 +101,8 @@ function limitedTransferFrom(from, to, amount, ...)
 
   local pair = from .. "/" .. system.getSender()
 
-  assert(_allowance[pair], "not approved")
-  assert(_allowance[pair] >= amount, "insufficient allowance")
+  assert(_allowance[pair], "ARC1: not approved")
+  assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
 
   _allowance[pair] = _allowance[pair] - amount
 
@@ -124,8 +124,8 @@ function limitedBurnFrom(from, amount)
 
   local pair = from .. "/" .. system.getSender()
 
-  assert(_allowance[pair], "not approved")
-  assert(_allowance[pair] >= amount, "insufficient allowance")
+  assert(_allowance[pair], "ARC1: not approved")
+  assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
 
   _burn(from, amount)
   _allowance[pair] = _allowance[pair] - amount

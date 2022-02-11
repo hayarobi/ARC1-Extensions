@@ -29,7 +29,7 @@ end
 function addPauser(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "only contract owner can approve pauser role")
+  assert(system.getSender() == system.getCreator(), "ARC1: only contract owner can approve pauser role")
 
   _pauser[account] = true
 
@@ -45,8 +45,8 @@ end
 function removePauser(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "only owner can remove pauser role")
-  assert(isPauser(account), "only pauser can be removed pauser role")
+  assert(system.getSender() == system.getCreator(), "ARC1: only owner can remove pauser role")
+  assert(isPauser(account), "ARC1: only pauser can be removed pauser role")
 
   _pauser[account] = nil
 
@@ -59,8 +59,8 @@ end
 -- @event   removePauser(TX sender)
 
 function renouncePauser()
-  assert(system.getSender() ~= system.getCreator(), "owner can't renounce pauser role")
-  assert(isPauser(system.getSender()), "only pauser can renounce pauser role")
+  assert(system.getSender() ~= system.getCreator(), "ARC1: owner can't renounce pauser role")
+  assert(isPauser(system.getSender()), "ARC1: only pauser can renounce pauser role")
 
   _pauser[system.getSender()] = nil
 
@@ -82,8 +82,8 @@ end
 -- @event   pause(TX sender)
 
 function pause()
-  assert(not _paused:get(), "contract is paused")
-  assert(isPauser(system.getSender()), "only pauser can pause")
+  assert(not _paused:get(), "ARC1: contract is paused")
+  assert(isPauser(system.getSender()), "ARC1: only pauser can pause")
 
   _paused:set(true)
 
@@ -96,8 +96,8 @@ end
 -- @event   unpause(TX sender)
 
 function unpause()
-  assert(_paused:get(), "contract is unpaused")
-  assert(isPauser(system.getSender()), "only pauser can unpause")
+  assert(_paused:get(), "ARC1: contract is unpaused")
+  assert(isPauser(system.getSender()), "ARC1: only pauser can unpause")
 
   _paused:set(false)
 

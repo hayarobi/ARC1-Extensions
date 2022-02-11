@@ -30,7 +30,7 @@ function setApprovalForAll(operator, approved)
 
   local sender = system.getSender()
 
-  assert(sender ~= operator, "cannot approve self as operator")
+  assert(sender ~= operator, "ARC1: cannot approve self as operator")
 
   if approved then
     _operators[sender .. "/" .. operator] = true
@@ -57,8 +57,8 @@ function transferFrom(from, to, amount, ...)
 
   local operator = system.getSender()
 
-  assert(operator ~= from, "use the transfer function")
-  assert(isApprovedForAll(from, operator), "caller is not approved for holder")
+  assert(operator ~= from, "ARC1: use the transfer function")
+  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
 
   contract.event("transfer", from, to, bignum.tostring(amount), operator)
 
@@ -77,8 +77,8 @@ function burnFrom(from, amount)
 
   local operator = system.getSender()
 
-  assert(operator ~= from, "use the burn function")
-  assert(isApprovedForAll(from, operator), "caller is not approved for holder")
+  assert(operator ~= from, "ARC1: use the burn function")
+  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
 
   contract.event("burn", from, bignum.tostring(amount), operator)
 

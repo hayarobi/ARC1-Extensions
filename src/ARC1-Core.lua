@@ -32,37 +32,37 @@ local function _typecheck(x, t)
 
   if (x and t == 'address') then -- a string of alphanumeric char. except for '0, I, O, l'
 
-    assert(type(x) == 'string', "address must be string type")
+    assert(type(x) == 'string', "ARC1: address must be string type")
 
     -- check address length
-    assert(52 == #x, string.format("invalid address length: %s (%s)", x, #x))
+    assert(52 == #x, string.format("ARC1: invalid address length: %s (%s)", x, #x))
 
     -- check character
     local invalidChar = string.match(x, '[^123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]')
-    assert(nil == invalidChar, string.format("invalid address format: %s contains invalid char %s", x, invalidChar or 'nil'))
+    assert(nil == invalidChar, string.format("ARC1: invalid address format: %s contains invalid char %s", x, invalidChar or 'nil'))
 
   elseif (x and t == 'ubig') then   -- a positive big number
 
     -- check unsigned bignum
-    assert(bignum.isbignum(x), string.format("invalid type: %s != %s", type(x), t))
-    assert(x >= bignum.number(0), string.format("%s must be positive number", bignum.tostring(x)))
+    assert(bignum.isbignum(x), string.format("ARC1: invalid type: %s != %s", type(x), t))
+    assert(x >= bignum.number(0), string.format("ARC1: %s must be positive number", bignum.tostring(x)))
 
   elseif (x and t == 'uint') then   -- a positive number
 
-    assert(type(x) == 'number', string.format("invalid type: %s != number", type(x)))
-    assert(math.floor(x) == x, "the number must be an integer")
-    assert(x >= 0, "the number must be 0 or positive")
+    assert(type(x) == 'number', string.format("ARC1: invalid type: %s != number", type(x)))
+    assert(math.floor(x) == x, "ARC1: the number must be an integer")
+    assert(x >= 0, "ARC1: the number must be 0 or positive")
 
   else
     -- check default lua types
-    assert(type(x) == t, string.format("invalid type: %s != %s", type(x), t or 'nil'))
+    assert(type(x) == t, string.format("ARC1: invalid type: %s != %s", type(x), t or 'nil'))
 
   end
 end
 
 function _check_bignum(x)
   if type(x) == 'string' then
-    assert(string.match(x, '[^0-9]') == nil, "amount contains invalid character")
+    assert(string.match(x, '[^0-9]') == nil, "ARC1: amount contains invalid character")
     x = bignum.number(x)
   end
   _typecheck(x, 'ubig')
@@ -171,11 +171,11 @@ end
 -- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _transfer(from, to, amount, ...)
-  assert(not _paused:get(), "paused contract")
-  assert(not _blacklist[from],'sender is on blacklist')
-  assert(not _blacklist[to],'recipient is on blacklist')
+  assert(not _paused:get(), "ARC1: paused contract")
+  assert(not _blacklist[from], "ARC1: sender is on blacklist")
+  assert(not _blacklist[to], "ARC1: recipient is on blacklist")
 
-  assert(_balances[from] and _balances[from] >= amount, "not enough balance")
+  assert(_balances[from] and _balances[from] >= amount, "ARC1: not enough balance")
 
   _balances[from] = _balances[from] - amount
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
@@ -191,8 +191,8 @@ end
 -- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _mint(to, amount, ...)
-  assert(not _paused:get(), "paused contract")
-  assert(not _blacklist[to],'recipient is on blacklist')
+  assert(not _paused:get(), "ARC1: paused contract")
+  assert(not _blacklist[to], "ARC1: recipient is on blacklist")
 
   _totalSupply:set((_totalSupply:get() or bignum.number(0)) + amount)
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
@@ -207,10 +207,10 @@ end
 -- @param   amount  (ubig) amount of tokens to burn
 
 local function _burn(from, amount)
-  assert(not _paused:get(), "paused contract")
-  assert(not _blacklist[from],'sender is on blacklist')
+  assert(not _paused:get(), "ARC1: paused contract")
+  assert(not _blacklist[from], "ARC1: sender is on blacklist")
 
-  assert(_balances[from] and _balances[from] >= amount, "not enough balance")
+  assert(_balances[from] and _balances[from] >= amount, "ARC1: not enough balance")
 
   _totalSupply:set(_totalSupply:get() - amount)
   _balances[from] = _balances[from] - amount
