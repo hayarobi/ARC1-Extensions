@@ -59,8 +59,8 @@ The factory can also be called from herajs, herapy, libaergo...
 ## Token Factory Address
 
 <table>
-  <tr><td>testnet</td><td>AmggWvbwQGUxXkk5BGAnmv3C3VocveuaPQDb8N7QDYbi6FkAJeBs</td></tr>
-  <tr><td>alphanet</td><td>AmhAdUDbfmDR3sCreuqnrVS5pk31a8kf8aMieuzwSJQWdMi5Ukpe</td></tr>
+  <tr><td>testnet</td><td>AmguxZEqwoFCWUxUP9KdKu1Q4CggZJNnZLj3E9Q3d4ug69tU1GbZ</td></tr>
+  <tr><td>alphanet</td><td>AmhfonWtSJQ2j1A963zjMdtMKr94RKyUpgAoYVff3Db4gjNgTwy1</td></tr>
 </table>
 
 
