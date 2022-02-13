@@ -74,6 +74,7 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
   assert(initial_supply >= bignum.number(0), "invalid initial supply")
   local max_supply = options["max_supply"]
   if max_supply then
+    assert(options["mintable"], "max_supply is only available with the mintable extension")
     max_supply = bignum.number(max_supply)
     assert(max_supply >= initial_supply, "invalid max supply")
   end
