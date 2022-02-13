@@ -65,26 +65,6 @@ function transferFrom(from, to, amount, ...)
   return _transfer(from, to, amount, ...)
 end
 
--- Burn tokens from an account, Tx sender have to be approved to spend from the account
--- @type    call
--- @param   from    (address) sender's address
--- @param   amount  (ubig)    amount of tokens to send
--- @event   burn(Tx sender, from, amount)
 
-function burnFrom(from, amount)
-  _typecheck(from, 'address')
-  amount = _check_bignum(amount)
-
-  local operator = system.getSender()
-
-  assert(operator ~= from, "ARC1: use the burn function")
-  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
-
-  contract.event("burn", from, bignum.tostring(amount), operator)
-
-  _burn(from, amount)
-end
-
-
-abi.register(setApprovalForAll, transferFrom, burnFrom)
+abi.register(setApprovalForAll, transferFrom)
 abi.register_view(isApprovedForAll)

@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 -- Aergo Standard Token Interface (Proposal) - 20211028
--- Core (+Burnable)
+-- Core
 ------------------------------------------------------------------------------
 
 ---- State Data for Token
@@ -235,18 +235,4 @@ function transfer(to, amount, ...)
 end
 
 
--- Burn tokens (from TX sender)
--- @type    call
--- @param   amount  (ubig) amount of token to burn
--- @event   burn(nil, TX sender, amount)
-
-function burn(amount)
-  amount = _check_bignum(amount)
-
-  _burn(system.getSender(), amount)
-
-  contract.event("burn", system.getSender(), bignum.tostring(amount), nil)
-end
-
-
-abi.register(transfer, burn)
+abi.register(transfer)
