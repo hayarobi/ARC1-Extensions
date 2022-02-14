@@ -3,6 +3,8 @@
 -- Allowed approval
 ------------------------------------------------------------------------------
 
+extensions["limited_approval"] = true
+
 state.var {
   -- limited approval
   _allowance = state.map(),   -- address/address -> unsigned_bignum

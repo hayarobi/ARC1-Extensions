@@ -3,6 +3,8 @@
 -- Burnable
 ------------------------------------------------------------------------------
 
+extensions["burnable"] = true
+
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of token to burn

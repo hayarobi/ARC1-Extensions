@@ -3,6 +3,8 @@
 -- All approval
 ------------------------------------------------------------------------------
 
+extensions["all_approval"] = true
+
 state.var {
   -- All Approval
   _operators = state.map(),   -- address/address -> boolean
