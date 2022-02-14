@@ -10,56 +10,59 @@ state.var {
   _allowance = state.map(),   -- address/address -> unsigned_bignum
 }
 
-
 -- Approve an account to spend the specified amount of Tx sender's tokens
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of allowed tokens
--- @event   approve(Tx sender, spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of allowed tokens
+-- @event   approve(Tx sender, operator, amount)
 
-function approve(spender, amount)
-  _typecheck(spender, 'address')
+function approve(operator, amount)
+  _typecheck(operator, 'address')
   amount = _check_bignum(amount)
 
-  assert(system.getSender() ~= spender, "ARC1: cannot approve self as operator")
+  local owner = system.getSender()
 
-  _allowance[system.getSender() .. "/" .. spender] = amount
+  assert(owner ~= operator, "ARC1: cannot approve self as operator")
 
-  contract.event("approve", system.getSender(), spender, bignum.tostring(amount))
+  _allowance[owner .. "/" .. operator] = amount
+
+  contract.event("approve", owner, operator, bignum.tostring(amount))
 end
 
 
 -- Increase the amount of tokens that Tx sender allowed to an account
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of increased tokens
--- @event   increaseAllowance(Tx sender, spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of increased tokens
+-- @event   increaseAllowance(Tx sender, operator, amount)
 
-function increaseAllowance(spender, amount)
-  _typecheck(spender, 'address')
+function increaseAllowance(operator, amount)
+  _typecheck(operator, 'address')
   amount = _check_bignum(amount)
 
-  local pair = system.getSender() .. "/" .. spender
+  local owner = system.getSender()
+  local pair = owner .. "/" .. operator
 
   assert(_allowance[pair], "ARC1: not approved")
 
   _allowance[pair] = _allowance[pair] + amount
 
-  contract.event("increaseAllowance", system.getSender(), spender, bignum.tostring(amount))
+  contract.event("increaseAllowance", owner, operator, bignum.tostring(amount))
 end
 
 
 -- Decrease the amount of tokens that Tx sender allowed to an account
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of decreased tokens
--- @event   decreaseAllowance(Tx sender, spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of decreased tokens
+-- @event   decreaseAllowance(Tx sender, operator, amount)
 
-function decreaseAllowance(spender, amount)
-  _typecheck(spender, 'address')
+function decreaseAllowance(operator, amount)
+  _typecheck(operator, 'address')
   amount = _check_bignum(amount)
 
-  local pair = system.getSender() .. "/" .. spender
+  local owner = system.getSender()
+  local pair = owner .. "/" .. operator
 
   assert(_allowance[pair], "ARC1: not approved")
 
@@ -69,21 +72,21 @@ function decreaseAllowance(spender, amount)
     _allowance[pair] = _allowance[pair] - amount
   end
 
-  contract.event("decreaseAllowance", system.getSender(), spender, bignum.tostring(amount))
+  contract.event("decreaseAllowance", owner, operator, bignum.tostring(amount))
 end
 
 
 -- Get amount of remaining tokens that an account allowed to another
 -- @type    query
--- @param   owner   (address) owner's address
--- @param   spender (address) spender's address
+-- @param   owner    (address) owner's address
+-- @param   operator (address) operator's address
 -- @return  (number) amount of remaining tokens
 
-function allowance(owner, spender)
+function allowance(owner, operator)
   _typecheck(owner, 'address')
-  _typecheck(spender, 'address')
+  _typecheck(operator, 'address')
 
-  return _allowance[owner .."/".. spender] or bignum.number(0)
+  return _allowance[owner .."/".. operator] or bignum.number(0)
 end
 
 
@@ -101,14 +104,18 @@ function limitedTransferFrom(from, to, amount, ...)
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
 
-  local pair = from .. "/" .. system.getSender()
+  local operator = system.getSender()
+
+  assert(operator ~= from, "ARC1: use the transfer function")
+
+  local pair = from .. "/" .. operator
 
   assert(_allowance[pair], "ARC1: not approved")
   assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
 
   _allowance[pair] = _allowance[pair] - amount
 
-  contract.event("transfer", from, to, bignum.tostring(amount), system.getSender())
+  contract.event("transfer", from, to, bignum.tostring(amount), operator)
 
   return _transfer(from, to, amount, ...)
 end
