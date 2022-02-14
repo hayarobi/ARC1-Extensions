@@ -3,6 +3,8 @@
 -- All approval
 ------------------------------------------------------------------------------
 
+extensions["all_approval"] = true
+
 state.var {
   -- All Approval
   _operators = state.map(),   -- address/address -> boolean
@@ -58,33 +60,13 @@ function transferFrom(from, to, amount, ...)
   local operator = system.getSender()
 
   assert(operator ~= from, "ARC1: use the transfer function")
-  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
+  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved by holder")
 
   contract.event("transfer", from, to, bignum.tostring(amount), operator)
 
   return _transfer(from, to, amount, ...)
 end
 
--- Burn tokens from an account, Tx sender have to be approved to spend from the account
--- @type    call
--- @param   from    (address) sender's address
--- @param   amount  (ubig)    amount of tokens to send
--- @event   burn(Tx sender, from, amount)
 
-function burnFrom(from, amount)
-  _typecheck(from, 'address')
-  amount = _check_bignum(amount)
-
-  local operator = system.getSender()
-
-  assert(operator ~= from, "ARC1: use the burn function")
-  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
-
-  contract.event("burn", from, bignum.tostring(amount), operator)
-
-  _burn(from, amount)
-end
-
-
-abi.register(setApprovalForAll, transferFrom, burnFrom)
+abi.register(setApprovalForAll, transferFrom)
 abi.register_view(isApprovedForAll)

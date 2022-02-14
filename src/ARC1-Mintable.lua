@@ -3,6 +3,8 @@
 -- Mintable
 ------------------------------------------------------------------------------
 
+extensions["mintable"] = true
+
 state.var {
   -- mintable
   _minter = state.map(),       -- address -> boolean
