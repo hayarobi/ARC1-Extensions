@@ -61,7 +61,7 @@ function transferFrom(from, to, amount, ...)
 
   assert(operator ~= from, "ARC1: use the transfer function")
   assert(isApprovedForAll(from, operator), "ARC1: caller is not approved by holder")
-ß
+
   contract.event("transfer", from, to, bignum.tostring(amount), operator)
 
   return _transfer(from, to, amount, ...)
