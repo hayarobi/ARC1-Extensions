@@ -2,6 +2,10 @@ arc1_core = [[
 %core%
 ]]
 
+arc1_burnable = [[
+%burnable%
+]]
+
 arc1_mintable = [[
 %mintable%
 ]]
@@ -52,6 +56,9 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
 
   local contract_code = arc1_core .. arc1_constructor
 
+  if options["burnable"] then
+    contract_code = contract_code .. arc1_burnable
+  end
   if options["mintable"] then
     contract_code = contract_code .. arc1_mintable
   end

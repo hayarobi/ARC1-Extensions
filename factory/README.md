@@ -14,6 +14,7 @@ the arguments:
 
 The options is a table informing which extensions to add to the token:
 
+* burnable
 * mintable
 * blacklist
 * pausable
@@ -40,7 +41,7 @@ Here is an example:
 
 ```lua
 local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
-                            '1000000', {mintable=true,blacklist=true})
+                            '1000000', {mintable=true,burnable=true})
 ```
 
 And how to inform a max supply (for mintable tokens):
