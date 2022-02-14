@@ -35,7 +35,7 @@ function burnFrom(from, amount)
   local operator = system.getSender()
 
   assert(operator ~= from, "ARC1: use the burn function")
-  assert(isApprovedForAll(from, operator), "ARC1: caller is not approved for holder")
+  assert(isApprovedForAll(from, operator), "ARC1: caller not approved by holder")
 
   contract.event("burn", from, bignum.tostring(amount), operator)
 
@@ -60,7 +60,7 @@ function limitedBurnFrom(from, amount)
 
   local pair = from .. "/" .. operator
 
-  assert(_allowance[pair], "ARC1: not approved")
+  assert(_allowance[pair], "ARC1: caller not approved by holder")
   assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
 
   _allowance[pair] = _allowance[pair] - amount

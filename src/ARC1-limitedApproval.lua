@@ -21,7 +21,7 @@ function approve(spender, amount)
   _typecheck(spender, 'address')
   amount = _check_bignum(amount)
 
-  assert(system.getSender() ~= spender, "ARC1: cannot set approve self")
+  assert(system.getSender() ~= spender, "ARC1: cannot approve self as operator")
 
   _allowance[system.getSender() .. "/" .. spender] = amount
 
