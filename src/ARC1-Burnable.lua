@@ -30,7 +30,7 @@ function burnFrom(from, amount)
   _typecheck(from, 'address')
   amount = _check_bignum(amount)
 
-  assert(extensions["all_approval"], "ARC1: extension not available")
+  assert(extensions["all_approval"], "ARC1: all-approval extension not available")
 
   local operator = system.getSender()
 
@@ -52,17 +52,22 @@ function limitedBurnFrom(from, amount)
   _typecheck(from, 'address')
   amount = _check_bignum(amount)
 
-  assert(extensions["limited_approval"], "ARC1: extension not available")
+  assert(extensions["limited_approval"], "ARC1: limited-approval extension not available")
 
-  local pair = from .. "/" .. system.getSender()
+  local operator = system.getSender()
+
+  assert(operator ~= from, "ARC1: use the burn function")
+
+  local pair = from .. "/" .. operator
 
   assert(_allowance[pair], "ARC1: not approved")
   assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
 
-  _burn(from, amount)
   _allowance[pair] = _allowance[pair] - amount
 
-  contract.event("burn", from, bignum.tostring(amount), system.getSender())
+  contract.event("burn", from, bignum.tostring(amount), operator)
+
+  _burn(from, amount)
 end
 
 
