@@ -82,7 +82,7 @@ local function _mint(to, amount, ...)
 -- Burn tokens from an account
 -- @type    internal
 -- @param   from   (address) 
--- @param   amount  (ubig) amount of tokens to burn
+-- @param   amount (ubig) amount of tokens to burn
 local function _burn(from, amount)
 
 -- Transfer tokens to an account (from TX sender)
@@ -93,16 +93,37 @@ local function _burn(from, amount)
 -- @return  value returned from 'tokensReceived' callback, or nil
 -- @event   transfer(nil, TX sender, to, amount)
 function transfer(to, amount, ...)
+```
 
+### + ARC1 : Burnable
+
+``` lua
 -- Burn tokens (from TX sender)
 -- @type    call
--- @param   amount  (ubig) amount of token to burn
--- @event   burn(nil, TX sender, amount) 
+-- @param   amount  (ubig) amount of tokens to burn
+-- @event   burn(from, amount, nil)
 function burn(amount)
+
+-- Burn tokens from an account, Tx sender have to be approved to spend from the account
+-- This function can only be used if the All Approval extension is included
+-- @type    call
+-- @param   from    (address) address of the account from which the tokens will be burn
+-- @param   amount  (ubig)    amount of tokens to burn
+-- @event   burn(from, amount, operator)
+function burnFrom(from, amount)
+
+-- Burn tokens from an account using the allowance mechanism
+-- This function can only be used if the Limited Approval extension is included
+-- @type    call
+-- @param   from    (address) address of the account from which the tokens will be burn
+-- @param   amount  (ubig)    amount of tokens to burn
+-- @event   burn(from, amount, operator)
+function limitedBurnFrom(from, amount)
 ```
 
 
 ### + ARC1 : Mintable
+
 ``` lua
 
 -- set Max Supply
@@ -212,46 +233,48 @@ function setApprovalForAll(operator, approved)
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
--- @event   transfer(Tx sender, from, to, amount) 
+-- @event   transfer(from, to, amount, operator)
 function transferFrom(from, to, amount, ...)
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account
+-- This function can only be used if the Burnable extension is included
 -- @type    call
--- @param   from    (address) sender's address
--- @param   amount  (ubig)    amount of tokens to send
--- @event   burn(Tx sender, from, amount) 
+-- @param   from    (address) address of the account from which the tokens will be burn
+-- @param   amount  (ubig)    amount of tokens to burn
+-- @event   burn(from, amount, operator)
 function burnFrom(from, amount)
 ```
 
 ### + ARC1 : Limited approval
+
 ``` lua
 -- Approve an account to spend the specified amount of Tx sender's tokens
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of allowed tokens
--- @event   approve(Tx sender, spender, amount)
-function approve(spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of allowed tokens
+-- @event   approve(owner, operator, amount)
+function approve(operator, amount)
 
 -- Increase the amount of tokens that Tx sender allowed to an account 
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of increased tokens
--- @event   increaseAllowance(Tx sender, spender, amount)
-function increaseAllowance(spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of increased tokens
+-- @event   increaseAllowance(owner, operator, amount)
+function increaseAllowance(operator, amount)
 
 -- Decrease the amount of tokens that Tx sender allowed to an account
 -- @type    call
--- @param   spender (address) spender's address
--- @param   amount  (ubig)    amount of decreased tokens
--- @event   decreaseAllowance(Tx sender, spender, amount)
-function decreaseAllowance(spender, amount)
+-- @param   operator (address) operator's address
+-- @param   amount   (ubig)    amount of decreased tokens
+-- @event   decreaseAllowance(owner, operator, amount)
+function decreaseAllowance(operator, amount)
 
 -- Get amount of remaining tokens that an account allowed to another
 -- @type    query
--- @param   owner   (address) owner's address
--- @param   spender (address) spender's address
+-- @param   owner    (address) owner's address
+-- @param   operator (address) operator's address
 -- @return  (number) amount of remaining tokens
-function allowance(owner, spender)
+function allowance(owner, operator)
 
 -- Transfer tokens from an account to another using the allowance mechanism
 -- @type    call
@@ -260,14 +283,15 @@ function allowance(owner, spender)
 -- @param   amount (ubig)    amount of tokens to send
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
--- @event   transfer(Tx sender, from, to, amount) 
+-- @event   transfer(from, to, amount, operator)
 function limitedTransferFrom(from, to, amount, ...)
 
 -- Burn tokens from an account using the allowance mechanism
+-- This function can only be used if the Burnable extension is included
 -- @type    call
--- @param   from    (address) sender's address
+-- @param   from    (address) address of the account from which the tokens will be burn
 -- @param   amount  (ubig)    amount of tokens to burn
--- @event   burn(Tx sender, from, amount) 
+-- @event   burn(from, amount, operator)
 function limitedBurnFrom(from, amount)
 ```
 
