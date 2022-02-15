@@ -237,4 +237,15 @@ function transfer(to, amount, ...)
 end
 
 
-abi.register(transfer)
+-- returns a JSON string containing the list of ARC1 extensions
+-- that were included on the contract
+function arc1_extensions()
+  local list = {}
+  for name,_ in pairs(extensions) do
+    table.insert(list, name)
+  end
+  return json.encode(list)
+end
+
+
+abi.register(transfer, arc1_extensions)
