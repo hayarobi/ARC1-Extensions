@@ -8,7 +8,7 @@ extensions["burnable"] = true
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of token to burn
--- @event   burn(nil, TX sender, amount)
+-- @event   burn(account, amount, nil)
 
 function burn(amount)
   amount = _check_bignum(amount)
@@ -24,7 +24,7 @@ end
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to send
--- @event   burn(Tx sender, from, amount)
+-- @event   burn(from, amount, operator)
 
 function burnFrom(from, amount)
   _typecheck(from, 'address')
@@ -46,7 +46,7 @@ end
 -- @type    call
 -- @param   from    (address) sender's address
 -- @param   amount  (ubig)    amount of tokens to burn
--- @event   burn(TX Sender, from, amount)
+-- @event   burn(from, amount, operator)
 
 function limitedBurnFrom(from, amount)
   _typecheck(from, 'address')

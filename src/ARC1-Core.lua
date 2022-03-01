@@ -157,7 +157,7 @@ abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
 -- @return  value returned from 'tokensReceived' callback, or nil
 
 local function _callTokensReceived(from, to, amount, ...)
-  if system.isContract(to) then
+  if to ~= address0 and system.isContract(to) then
     return contract.call(to, "tokensReceived", system.getSender(), from, amount, ...)
   else
     return nil
