@@ -244,8 +244,9 @@ function arc1_extensions()
   for name,_ in pairs(extensions) do
     table.insert(list, name)
   end
-  return json.encode(list)
+  return list
 end
 
 
-abi.register(transfer, arc1_extensions)
+abi.register(transfer)
+abi.register_view(arc1_extensions)
