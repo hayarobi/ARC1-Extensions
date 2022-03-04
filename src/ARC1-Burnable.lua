@@ -8,7 +8,7 @@ extensions["burnable"] = true
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of token to burn
--- @event   burn(account, amount, nil)
+-- @event   burn(account, amount)
 
 function burn(amount)
   amount = _check_bignum(amount)
@@ -17,7 +17,7 @@ function burn(amount)
 
   _burn(sender, amount)
 
-  contract.event("burn", sender, bignum.tostring(amount), nil)
+  contract.event("burn", sender, bignum.tostring(amount))
 end
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account

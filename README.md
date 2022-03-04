@@ -91,7 +91,7 @@ local function _burn(from, amount)
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
--- @event   transfer(nil, TX sender, to, amount)
+-- @event   transfer(from, to, amount)
 function transfer(to, amount, ...)
 ```
 
@@ -101,7 +101,7 @@ function transfer(to, amount, ...)
 -- Burn tokens (from TX sender)
 -- @type    call
 -- @param   amount  (ubig) amount of tokens to burn
--- @event   burn(from, amount, nil)
+-- @event   burn(from, amount)
 function burn(amount)
 
 -- Burn tokens from an account, Tx sender have to be approved to spend from the account

@@ -50,7 +50,7 @@ end
 -- @param   amount  (ubig)    amount of tokens to send
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
--- @event   transfer(TX Sender, from, to, amount)
+-- @event   transfer(from, to, amount, operator)
 
 function transferFrom(from, to, amount, ...)
   _typecheck(from, 'address')

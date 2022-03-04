@@ -219,19 +219,19 @@ local function _burn(from, amount)
 end
 
 
--- Transfer tokens to an account (from TX sender)
+-- Transfer tokens to an account (from caller)
 -- @type    call
 -- @param   to      (address) recipient's address
 -- @param   amount  (ubig) amount of tokens to send
 -- @param   ...     additional data, is sent unaltered in call to 'tokensReceived' on 'to'
 -- @return  value returned from 'tokensReceived' callback, or nil
--- @event   transfer(nil, TX sender, to, amount)
+-- @event   transfer(from, to, amount)
 
 function transfer(to, amount, ...)
   _typecheck(to, 'address')
   amount = _check_bignum(amount)
 
-  contract.event("transfer", system.getSender(), to, bignum.tostring(amount), nil)
+  contract.event("transfer", system.getSender(), to, bignum.tostring(amount))
 
   return _transfer(system.getSender(), to, amount, ...)
 end
