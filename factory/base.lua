@@ -62,7 +62,7 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
     owner = system.getSender()
   end
 
-  local contract_code = arc1_core .. arc1_constructor
+  local contract_code = arc1_core
 
   if options["burnable"] then
     contract_code = contract_code .. arc1_burnable
@@ -82,6 +82,8 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
   if options["limited_approval"] then
     contract_code = contract_code .. arc1_limited_approval
   end
+
+  contract_code = contract_code .. arc1_constructor
 
   if not bignum.isbignum(initial_supply) then
     initial_supply = bignum.number(initial_supply)
