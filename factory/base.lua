@@ -31,6 +31,14 @@ state.var {
   _creator = state.value()
 }
 
+function set_creator(address)
+  assert(system.getSender() == _creator:get(), "ARC2: permission denied")
+  _typecheck(address, "address")
+  _creator:set(address)
+end
+
+abi.register(set_creator)
+
 function constructor(name, symbol, decimals, initial_supply, max_supply, owner)
   _init(name, symbol, decimals)
   _creator:set(owner)
