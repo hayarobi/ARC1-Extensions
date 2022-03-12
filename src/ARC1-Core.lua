@@ -83,7 +83,7 @@ local function _init(name, symbol, decimals)
   _typecheck(symbol, 'string')
   _typecheck(decimals, 'uint')
 
-  assert(decimals > 0)
+  assert(decimals >= 0 and decimals <= 18, "decimals must be between 0 and 18")
 
   _name:set(name)
   _symbol:set(symbol)

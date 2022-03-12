@@ -6,7 +6,6 @@
 extensions["mintable"] = true
 
 state.var {
-  -- mintable
   _minter = state.map(),       -- address -> boolean
   _max_supply = state.value()  -- unsigned_bignum
 }
@@ -28,7 +27,7 @@ end
 function isMinter(account)
   _typecheck(account, 'address')
 
-  return (account == system.getCreator()) or (_minter[account]==true)
+  return (account == system.getCreator()) or (_minter[account] == true)
 end
 
 -- Add an account to minters
