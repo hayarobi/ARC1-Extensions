@@ -6,7 +6,6 @@
 extensions["limited_approval"] = true
 
 state.var {
-  -- limited approval
   _allowance = state.map(),   -- address/address -> unsigned_bignum
 }
 
@@ -123,3 +122,38 @@ end
 
 abi.register(approve, increaseAllowance, decreaseAllowance, limitedTransferFrom)
 abi.register_view(allowance)
+
+
+-- Burn tokens from an account using the allowance mechanism
+-- @type    call
+-- @param   from    (address) sender's address
+-- @param   amount  (ubig)    amount of tokens to burn
+-- @event   burn(from, amount, operator)
+
+if extensions["burnable"] == true then
+
+function limitedBurnFrom(from, amount)
+  _typecheck(from, 'address')
+  amount = _check_bignum(amount)
+
+  assert(extensions["burnable"], "ARC1: burnable extension not available")
+
+  local operator = system.getSender()
+
+  assert(operator ~= from, "ARC1: use the burn function")
+
+  local pair = from .. "/" .. operator
+
+  assert(_allowance[pair], "ARC1: caller not approved by holder")
+  assert(_allowance[pair] >= amount, "ARC1: insufficient allowance")
+
+  _allowance[pair] = _allowance[pair] - amount
+
+  contract.event("burn", from, bignum.tostring(amount), operator)
+
+  _burn(from, amount)
+end
+
+abi.register(limitedBurnFrom)
+
+end

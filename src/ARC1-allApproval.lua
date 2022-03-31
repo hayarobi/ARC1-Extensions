@@ -6,7 +6,6 @@
 extensions["all_approval"] = true
 
 state.var {
-  -- All Approval
   _operators = state.map(),   -- address/address -> boolean
 }
 
@@ -70,3 +69,32 @@ end
 
 abi.register(setApprovalForAll, transferFrom)
 abi.register_view(isApprovedForAll)
+
+
+-- Burn tokens from an account, the operator needs to be approved to spend from the account
+-- @type    call
+-- @param   from    (address) sender's address
+-- @param   amount  (ubig)    amount of tokens to send
+-- @event   burn(from, amount, operator)
+
+if extensions["burnable"] == true then
+
+function burnFrom(from, amount)
+  _typecheck(from, 'address')
+  amount = _check_bignum(amount)
+
+  assert(extensions["burnable"], "ARC1: burnable extension not available")
+
+  local operator = system.getSender()
+
+  assert(operator ~= from, "ARC1: use the burn function")
+  assert(isApprovedForAll(from, operator), "ARC1: caller not approved by holder")
+
+  contract.event("burn", from, bignum.tostring(amount), operator)
+
+  _burn(from, amount)
+end
+
+abi.register(burnFrom)
+
+end
