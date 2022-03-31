@@ -27,7 +27,7 @@ end
 function isMinter(account)
   _typecheck(account, 'address')
 
-  return (account == system.getCreator()) or (_minter[account] == true)
+  return (account == _contract_owner:get()) or (_minter[account] == true)
 end
 
 -- Add an account to minters
@@ -38,7 +38,7 @@ end
 function addMinter(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "ARC1: only the contract owner can add a minter")
+  assert(system.getSender() == _contract_owner:get(), "ARC1: only the contract owner can add a minter")
 
   _minter[account] = true
 
@@ -53,8 +53,9 @@ end
 function removeMinter(account)
   _typecheck(account, 'address')
 
-  assert(system.getSender() == system.getCreator(), "ARC1: only the contract owner can remove a minter")
-  assert(account ~= system.getCreator(), "ARC1: the contract owner is always a minter")
+  local contract_owner = _contract_owner:get()
+  assert(system.getSender() == contract_owner, "ARC1: only the contract owner can remove a minter")
+  assert(account ~= contract_owner, "ARC1: the contract owner is always a minter")
   assert(isMinter(account), "ARC1: not a minter")
 
   _minter:delete(account)
@@ -68,7 +69,7 @@ end
 
 function renounceMinter()
   local sender = system.getSender()
-  assert(sender ~= system.getCreator(), "ARC1: contract owner can't renounce minter role")
+  assert(sender ~= _contract_owner:get(), "ARC1: contract owner can't renounce minter role")
   assert(isMinter(sender), "ARC1: only minter can renounce minter role")
 
   _minter:delete(sender)

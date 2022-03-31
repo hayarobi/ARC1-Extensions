@@ -27,21 +27,8 @@ arc1_limited_approval = [[
 ]]
 
 arc1_constructor = [[
-state.var {
-  _creator = state.value()
-}
-
-function set_creator(address)
-  assert(system.getSender() == _creator:get(), "ARC2: permission denied")
-  _typecheck(address, "address")
-  _creator:set(address)
-end
-
-abi.register(set_creator)
-
 function constructor(name, symbol, decimals, initial_supply, max_supply, owner)
-  _init(name, symbol, decimals)
-  _creator:set(owner)
+  _init(name, symbol, decimals, owner)
   local decimal_str = "1" .. string.rep("0", decimals)
   if initial_supply > bignum.number(0) then
     _mint(owner, initial_supply * bignum.number(decimal_str))

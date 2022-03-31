@@ -7,6 +7,7 @@ extensions = {}
 
 ---- State Data for Token
 state.var {
+  _contract_owner = state.value(),
 
   _balances = state.map(),        -- address -> unsigned_bignum
   _totalSupply = state.value(),   -- unsigned_bignum
@@ -20,7 +21,6 @@ state.var {
 
   -- Blacklist
   _blacklist = state.map()        -- address -> boolean
-
 }
 
 address0 = '1111111111111111111111111111111111111111111111111111' -- null address
@@ -76,8 +76,16 @@ end
 -- @param name (string) name of this token
 -- @param symbol (string) symbol of this token
 -- @param decimals (number) decimals of this token
+-- @param owner (optional:address) the owner of this contract
 
-local function _init(name, symbol, decimals)
+local function _init(name, symbol, decimals, owner)
+
+  if owner == nil or owner == '' then
+    owner = system.getCreator()
+  else
+    _typecheck(owner, "address")
+  end
+  _contract_owner:set(owner)
 
   _typecheck(name, 'string')
   _typecheck(symbol, 'string')
@@ -237,6 +245,12 @@ function transfer(to, amount, ...)
 end
 
 
+function set_contract_owner(address)
+  assert(system.getSender() == _contract_owner:get(), "ARC1: permission denied")
+  _typecheck(address, "address")
+  _contract_owner:set(address)
+end
+
 -- returns a JSON string containing the list of ARC1 extensions
 -- that were included on the contract
 function arc1_extensions()
@@ -248,5 +262,5 @@ function arc1_extensions()
 end
 
 
-abi.register(transfer)
+abi.register(transfer, set_contract_owner)
 abi.register_view(arc1_extensions)
