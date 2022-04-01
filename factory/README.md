@@ -51,8 +51,9 @@ local token = contract.call(arc1_factory, "new_token", name, symbol, 18,
                             '1000000', {mintable=true,max_supply='5000000'})
 ```
 
-> :warning: Notice that the `initial_supply` and `max_supply` do not contain
-> the decimals. They can be either string or bignum.
+> :warning: The `initial_supply` and `max_supply` should NOT contain the decimal part!
+
+They can be either string or bignum.
 
 The factory can also be called from herajs, herapy, libaergo...
 
@@ -60,8 +61,8 @@ The factory can also be called from herajs, herapy, libaergo...
 ## Token Factory Address
 
 <table>
-  <tr><td>testnet</td><td>AmguxZEqwoFCWUxUP9KdKu1Q4CggZJNnZLj3E9Q3d4ug69tU1GbZ</td></tr>
-  <tr><td>alphanet</td><td>AmhfonWtSJQ2j1A963zjMdtMKr94RKyUpgAoYVff3Db4gjNgTwy1</td></tr>
+  <tr><td>testnet</td><td>AmhVVPAfP7sxoRHwuuoXkgW44DNmAY222fJ6n7pv916PMyXGamBY</td></tr>
+  <tr><td>alphanet</td><td>Amg1nfN8U8u8GarcEXHVNJL2MfYMWK9HP6XuNHHmbP64Bx2uTyvP</td></tr>
 </table>
 
 
