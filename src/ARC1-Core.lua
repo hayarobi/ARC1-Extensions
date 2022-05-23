@@ -64,7 +64,22 @@ end
 
 function _check_bignum(x)
   if type(x) == 'string' then
-    assert(string.match(x, '[^0-9]') == nil, "ARC1: amount contains invalid character")
+    assert(string.match(x, '[^0-9.]') == nil, "ARC1: amount contains invalid character")
+    local _, count = string.gsub(x, "%.", "")
+    assert(count <= 1, "ARC1: the amount is invalid")
+    if count == 1 then
+      local num_decimals = _decimals:get()
+      local p1, p2 = string.match('0' .. x .. '0', '(%d+)%.(%d+)')
+      local to_add = num_decimals - #p2
+      if to_add > 0 then
+        p2 = p2 .. string.rep('0', to_add)
+      elseif to_add < 0 then
+        p2 = string.sub(p2, 1, num_decimals)
+      end
+      x = p1 .. p2
+      x = string.gsub(x, '0*', '', 1)  -- remove leading zeros
+      if #x == 0 then x = '0' end
+    end
     x = bignum.number(x)
   end
   _typecheck(x, 'ubig')
