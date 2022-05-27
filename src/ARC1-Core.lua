@@ -16,6 +16,9 @@ state.var {
   _symbol = state.value(),        -- string
   _decimals = state.value(),      -- string
 
+  _metakeys = state.map(),        -- number -> string
+  _metadata = state.map(),        -- string -> string
+
   -- Pausable
   _paused = state.value(),        -- boolean
 
@@ -146,7 +149,54 @@ function decimals()
 end
 
 
--- Get a balance of an account
+-- Store token metadata
+-- @type    call
+
+function set_metadata(key, value)
+  _typecheck(key, 'string')
+  _typecheck(value, 'string')
+
+  assert(system.getSender() == _contract_owner:get(), "ARC1: permission denied")
+
+  for i=1,1000,1 do
+    local skey = _metakeys[tostring(i)]
+    if skey == nil then
+      _metakeys[tostring(i)] = key
+      break
+    end
+    if skey == key then
+      break
+    end
+  end
+
+  _metadata[key] = value
+
+end
+
+-- Get token metadata
+-- @type    query
+-- @return  (string) if key is nil, return all metadata from token,
+--                   otherwise return the value linked to the key
+
+function get_metadata(key)
+
+  if key ~= nil then
+    return _metadata[key]
+  end
+
+  local items = {}
+  for i=1,1000,1 do
+    key = _metakeys[tostring(i)]
+    if key == nil then break end
+    local value = _metadata[key]
+    items[key] = value
+  end
+  return items
+
+end
+
+
+-- Get the balance of an account
 -- @type    query
 -- @param   owner  (address)
 -- @return  (ubig) balance of owner
@@ -171,7 +221,8 @@ function totalSupply()
 end
 
 
-abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
+abi.register(set_metadata)
+abi.register_view(name, symbol, decimals, get_metadata, totalSupply, balanceOf)
 
 -- Hook "tokensReceived" function on the recipient after a 'transfer'
 -- @type internal
@@ -208,7 +259,6 @@ local function _transfer(from, to, amount, ...)
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
 
   return _callTokensReceived(from, to, amount, ...)
-
 end
 
 -- Mint new tokens to an account
