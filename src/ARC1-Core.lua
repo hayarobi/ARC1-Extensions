@@ -151,25 +151,25 @@ end
 
 -- Store token metadata
 -- @type    call
+-- @param   metadata (table)  lua table containing key-value pairs
 
-function set_metadata(key, value)
-  _typecheck(key, 'string')
-  _typecheck(value, 'string')
+function set_metadata(metadata)
 
   assert(system.getSender() == _contract_owner:get(), "ARC1: permission denied")
 
-  for i=1,1000,1 do
-    local skey = _metakeys[tostring(i)]
-    if skey == nil then
-      _metakeys[tostring(i)] = key
-      break
+  for key,value in pairs(metadata) do
+    for i=1,1000,1 do
+      local skey = _metakeys[tostring(i)]
+      if skey == nil then
+        _metakeys[tostring(i)] = key
+        break
+      end
+      if skey == key then
+        break
+      end
     end
-    if skey == key then
-      break
-    end
+    _metadata[key] = value
   end
-
-  _metadata[key] = value
 
 end
 
