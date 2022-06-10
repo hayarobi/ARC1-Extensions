@@ -16,6 +16,9 @@ state.var {
   _symbol = state.value(),        -- string
   _decimals = state.value(),      -- string
 
+  _metakeys = state.map(),        -- number -> string
+  _metadata = state.map(),        -- string -> string
+
   -- Pausable
   _paused = state.value(),        -- boolean
 
@@ -64,7 +67,22 @@ end
 
 function _check_bignum(x)
   if type(x) == 'string' then
-    assert(string.match(x, '[^0-9]') == nil, "ARC1: amount contains invalid character")
+    assert(string.match(x, '[^0-9.]') == nil, "ARC1: amount contains invalid character")
+    local _, count = string.gsub(x, "%.", "")
+    assert(count <= 1, "ARC1: the amount is invalid")
+    if count == 1 then
+      local num_decimals = _decimals:get()
+      local p1, p2 = string.match('0' .. x .. '0', '(%d+)%.(%d+)')
+      local to_add = num_decimals - #p2
+      if to_add > 0 then
+        p2 = p2 .. string.rep('0', to_add)
+      elseif to_add < 0 then
+        p2 = string.sub(p2, 1, num_decimals)
+      end
+      x = p1 .. p2
+      x = string.gsub(x, '0*', '', 1)  -- remove leading zeros
+      if #x == 0 then x = '0' end
+    end
     x = bignum.number(x)
   end
   _typecheck(x, 'ubig')
@@ -131,7 +149,54 @@ function decimals()
 end
 
 
--- Get a balance of an account
+-- Store token metadata
+-- @type    call
+-- @param   metadata (table)  lua table containing key-value pairs
+
+function set_metadata(metadata)
+
+  assert(system.getSender() == _contract_owner:get(), "ARC1: permission denied")
+
+  for key,value in pairs(metadata) do
+    for i=1,1000,1 do
+      local skey = _metakeys[tostring(i)]
+      if skey == nil then
+        _metakeys[tostring(i)] = key
+        break
+      end
+      if skey == key then
+        break
+      end
+    end
+    _metadata[key] = value
+  end
+
+end
+
+-- Get token metadata
+-- @type    query
+-- @return  (string) if key is nil, return all metadata from token,
+--                   otherwise return the value linked to the key
+
+function get_metadata(key)
+
+  if key ~= nil then
+    return _metadata[key]
+  end
+
+  local items = {}
+  for i=1,1000,1 do
+    key = _metakeys[tostring(i)]
+    if key == nil then break end
+    local value = _metadata[key]
+    items[key] = value
+  end
+  return items
+
+end
+
+
+-- Get the balance of an account
 -- @type    query
 -- @param   owner  (address)
 -- @return  (ubig) balance of owner
@@ -156,7 +221,8 @@ function totalSupply()
 end
 
 
-abi.register_view(name, symbol, decimals, totalSupply, balanceOf)
+abi.register(set_metadata)
+abi.register_view(name, symbol, decimals, get_metadata, totalSupply, balanceOf)
 
 -- Hook "tokensReceived" function on the recipient after a 'transfer'
 -- @type internal
@@ -193,7 +259,6 @@ local function _transfer(from, to, amount, ...)
   _balances[to] = (_balances[to] or bignum.number(0)) + amount
 
   return _callTokensReceived(from, to, amount, ...)
-
 end
 
 -- Mint new tokens to an account
