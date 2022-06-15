@@ -90,4 +90,13 @@ function new_token(name, symbol, decimals, initial_supply, options, owner)
   return address
 end
 
-abi.register(new_token)
+function _checkOwner()
+    assert(system.getCreator() == system.getSender(), "only owner can call")
+end
+
+-- init function is required to be used by proxy
+function init()
+    _checkOwner()
+end
+
+abi.register(init,new_token)
